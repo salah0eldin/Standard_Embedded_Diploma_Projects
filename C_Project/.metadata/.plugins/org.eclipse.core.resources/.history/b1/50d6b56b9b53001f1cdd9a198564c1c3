@@ -1,0 +1,38 @@
+/*
+ * main.c
+ *
+ *  Created on: Aug 5, 2024
+ *      Author: Salah Eldin
+ */
+
+#include "headers/projfuncs.h"
+
+int main() {
+
+	setvbuf(stdout, NULL, _IONBF, 0);
+	setvbuf(stderr, NULL, _IONBF, 0);
+
+	mainInput userChoice = MAIN;
+
+	node *stdList = nullptr;
+
+	void (*funcArr[9])(node**);
+
+	funcArr[ADD] = addStudent;
+	funcArr[DISPLAY] = dispAllStudents;
+	funcArr[SEARCH] = searchById;
+	funcArr[UPDATE] = updateById;
+	funcArr[DELETE] = deleteById;
+	funcArr[AVGGPA] = calcAvgGpa;
+	funcArr[MAXGPA] = getMaxGpa;
+	funcArr[EXIT] = endProgram;
+
+	for (;;) {
+		showMainWindow(&userChoice);
+
+		if (userChoice >= ADD && userChoice <= EXIT)
+			(*funcArr[userChoice])(&stdList);
+	}
+
+	return 0;
+}

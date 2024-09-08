@@ -1,0 +1,82 @@
+/*
+ * stdList.c
+ *
+ *  Created on: Aug 6, 2024
+ *      Author: dell
+ */
+#include "../headers/stdList.h"
+
+int addStdToList(node **stdListptr, const student *std) {
+
+	node *temp, *prevTemp;
+	temp = prevTemp = *stdListptr;
+
+	while (temp != nullptr ) {
+		if (temp->data.id > std->id)
+			break;
+		else if (temp->data.id == std->id) {
+			puts("|                                                   |");
+			puts("|           ID is taken choose another one          |");
+			puts("|___________________________________________________|");
+
+			return;
+		}
+		prevTemp = temp;
+		temp = temp->next;
+	}
+
+	node *newStd = (node*) malloc(sizeof(node));
+	newStd->data = *std;
+
+	if (temp == *stdListptr) {
+		newStd->next = (*stdListptr == nullptr ) ? nullptr : (*stdListptr)->next;
+		*stdListptr = newStd;
+	} else {
+		newStd->next = temp;
+		prevTemp->next = newStd;
+	}
+}
+
+void dispList(const node **stdListptr) {
+	node *temp = *stdListptr;
+	// Print the header
+	printf("| %-4s | %-20s | %-6s | %-10s |\n", "ID", "Name", "Age", "GPA");
+
+	while (temp != nullptr ) {
+		printf("|------|----------------------|--------|------------|\n");
+		printf("| %-4d | %-20s | %-6d | %-10.2f |\n", temp->data.id,
+				temp->data.name, temp->data.age, temp->data.gpa);
+		temp = temp->next;
+	}
+}
+
+node* findStudent(const node **stdListptr, const int id) {
+	node *std = *stdListptr;
+	while (std != nullptr ) {
+		if (std->data.id == id)
+			break;
+		else if (std->data.id > id)
+			return nullptr ;
+		std = std->next;
+	}
+	return std;
+}
+
+void deleteStdFromLlist(node **stdListptr,int id){
+
+	node* temp = *stdListptr;
+
+//	while()
+
+	return *stdListptr;
+}
+
+void freeStdList(node **stdListptr) {
+	node *temp = *stdListptr;
+	while (*stdListptr != nullptr ) {
+		temp = (*stdListptr)->next;
+		free(*stdListptr);
+		*stdListptr = temp;
+	}
+}
+

@@ -1,0 +1,24 @@
+/*
+ * projfuncs.h
+ *
+ *  Created on: Aug 5, 2024
+ *      Author: dell
+ */
+
+#ifndef HEADERS_PROJFUNCS_H_
+#define HEADERS_PROJFUNCS_H_
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "stdList.h"
+
+typedef enum{
+	MAIN,ADD,DISPLAY,SEARCH,UPDATE,AVGGPA,MAXGPA,EXIT
+} mainInput;
+
+void showMainWindow();
+
+void addStudent(node ** stdListptr);
+
+#endif /* HEADERS_PROJFUNCS_H_ */

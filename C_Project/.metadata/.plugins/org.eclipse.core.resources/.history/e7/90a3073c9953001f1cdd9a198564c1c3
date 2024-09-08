@@ -1,0 +1,54 @@
+/*
+ * main.c
+ *
+ *  Created on: Aug 5, 2024
+ *      Author: Salah Eldin
+ */
+
+#include "headers/projfuncs.h"
+
+#include <stdio.h>
+
+// Define ANSI color codes
+#define RESET   "\033[0m"
+#define RED     "\033[31m"      /* Red */
+#define GREEN   "\033[32m"      /* Green */
+#define YELLOW  "\033[33m"      /* Yellow */
+#define BLUE    "\033[34m"      /* Blue */
+#define MAGENTA "\033[35m"      /* Magenta */
+#define CYAN    "\033[36m"      /* Cyan */
+#define WHITE   "\033[37m"      /* White */
+
+void dispList(const node *stdList) {
+    const node *temp = stdList;
+
+    // Print the header
+    printf("%s| %-10s | %-20s | %-5s | %-5s |%s\n", BLUE, "ID", "Name", "Age", "GPA", RESET);
+    printf("%s|------------|----------------------|-------|-------|%s\n", BLUE, RESET);
+
+    while (temp) {
+        printf("| %-10d | %-20s | %-5d | %-5.2f |\n", temp->data.id,
+               temp->data.name, temp->data.age, temp->data.gpa);
+        temp = temp->next;
+    }
+}
+
+int main() {
+    // Example usage
+    node *stdList = (node*)malloc(sizeof(node));
+    node *newNode = (node*)malloc(sizeof(node));
+
+    stdList->data = (student){"Alice", 123, 20, 3.5};
+    newNode->data = (student){"Bob", 456, 21, 3.7};
+
+    stdList->next = newNode;
+    newNode->next = NULL;
+
+    dispList(&stdList);
+
+    // Free the allocated memory
+    free(newNode);
+    free(stdList);
+
+    return 0;
+}

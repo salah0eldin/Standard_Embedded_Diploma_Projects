@@ -1,0 +1,10 @@
+/*
+ * application.c
+ *
+ *  Created on: Sep 8, 2024
+ *      Author: Salah-Eldin
+ */
+
+#include "application.h"
+
+extern time_t time;

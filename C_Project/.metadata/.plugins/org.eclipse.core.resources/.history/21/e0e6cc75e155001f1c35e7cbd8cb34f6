@@ -1,0 +1,215 @@
+/*
+ * stdList.c
+ *
+ *  Created on: Aug 6, 2024
+ *      Author: Salah Eldin
+ */
+
+#include "../headers/stdList.h"
+
+// Add a student to the linked list
+int addStdToList(node **stdListptr, student *std) {
+
+	node *temp, *prevTemp;
+
+	// Initialize temp and prevTemp to the head of the list
+	temp = prevTemp = *stdListptr;
+
+	// Traverse the list to find the correct insertion point
+	while (temp != nullptr ) {
+		// Check if the new student's ID should be inserted before the current node
+		if (temp->data.id > std->id)
+			break;
+		// Check if a student with the same ID already exists
+		else if (temp->data.id == std->id)
+			return ID_TOKEN;
+
+		prevTemp = temp;
+		temp = temp->next;
+	}
+
+	// Allocate memory for the new student node
+	node *newStd = (node*) malloc(sizeof(node));
+	newStd->data = *std;
+
+	// Insert the new node at the beginning of the list
+	if (temp == *stdListptr) {
+		newStd->next = *stdListptr;
+		*stdListptr = newStd;
+	} else {
+		// Insert the new node after prevTemp
+		newStd->next = temp;
+		prevTemp->next = newStd;
+	}
+	return SUCCESS;
+}
+
+// Display all students in the linked list
+void dispList(node **stdListptr) {
+	node *temp = *stdListptr;
+
+	// Print the header of the list
+	printf("| %-4s | %-20s | %-6s | %-10s |\n", "ID", "Name", "Age", "GPA");
+
+	// Traverse the list and print each student's details
+	while (temp != nullptr ) {
+		printf("|------|----------------------|--------|------------|\n");
+		printf("| %-4d | %-20s | %-6d | %-10.2f |\n", temp->data.id,
+				temp->data.name, temp->data.age, temp->data.gpa);
+		temp = temp->next;
+	}
+}
+
+// Find a student by ID in the linked list
+node* findStudent(node **stdListptr, int id) {
+	node *std = *stdListptr;
+
+	// Traverse the list to find the student with the given ID
+	while (std != nullptr ) {
+		if (std->data.id == id)
+			break;
+		// If the current ID is greater than the search ID, the student is not in the list
+		else if (std->data.id > id)
+			return nullptr ;
+		std = std->next;
+	}
+	return std;
+}
+
+// Update a student's information in the linked list
+int updateStdFromList(node **stdListptr, int id, student *std) {
+	node *temp, *prevTemp;
+
+	temp = prevTemp = *stdListptr;
+
+	if (id != std->id) {
+		if (findStudent(stdListptr, std->id) != nullptr)
+			return ID_TOKEN;
+	}
+	// Traverse the list to find the student with the given ID
+	while (temp) {
+		if (temp->data.id == id)
+			break;
+		prevTemp = temp;
+		temp = temp->next;
+	}
+
+	// Remove the old student node from the list
+	if (temp == *stdListptr) {
+		*stdListptr = temp->next;
+	} else {
+		prevTemp->next = temp->next;
+	}
+	free(temp);
+
+	// Add the updated student information to the list
+	return addStdToList(stdListptr, std);
+}
+
+// Delete a student from the linked list by ID
+int deleteStdFromLlist(node **stdListptr, int id) {
+	node *temp, *prevTemp;
+
+	temp = prevTemp = *stdListptr;
+
+	// Traverse the list to find the student with the given ID
+	while (temp) {
+		if (temp->data.id == id)
+			break;
+		// If the current ID is greater than the search ID, the student is not in the list
+		else if (temp->data.id > id) {
+			temp = nullptr;
+			break;
+		}
+		prevTemp = temp;
+		temp = temp->next;
+	}
+
+	// If the student is not found, return ID_NOT_FOUND
+	if (temp == nullptr)
+		return ID_NOT_FOUND;
+
+	char c;
+	puts("| Are you sure you want to delete this student:     |");
+	printf("| %-4s | %-20s | %-6s | %-10s |\n", "ID", "Name", "Age", "GPA");
+	printf("|------|----------------------|--------|------------|\n");
+	printf("| %-4d | %-20s | %-6d | %-10.2f |\n", temp->data.id,
+			temp->data.name, temp->data.age, temp->data.gpa);
+	getchar();
+	printf("| yes or no (y/n): ");
+	scanf("%c", &c);
+
+	// If user confirms, delete the student node from the list
+	if (c == 'y') {
+		if (temp == *stdListptr) {
+			*stdListptr = temp->next;
+		} else {
+			prevTemp->next = temp->next;
+		}
+		free(temp);
+		return SUCCESS;
+	} else {
+		return CANCEL;
+	}
+}
+
+// Calculate the average GPA of all students in the linked list
+float calcAvgGpaList(node **stdListptr) {
+	float sum = 0;
+	int count = 0;
+
+	node *temp = *stdListptr;
+
+	// Traverse the list to calculate the sum of GPAs and count the number of students
+	while (temp) {
+		sum += temp->data.gpa;
+		count++;
+		temp = temp->next;
+	}
+
+	// Return the average GPA, avoid division by zero
+	return sum / (count ? count : 1);
+}
+
+// Get the student with the highest GPA from the linked list
+void getMaxGpaList(node **stdListptr) {
+	if (*stdListptr == nullptr) {
+		puts("|                No students in list                |");
+		return;
+	}
+	node *temp;
+	float maxGpa = 0;
+
+	temp = *stdListptr;
+
+	// Traverse the list to find the highest GPA
+	while (temp != nullptr ) {
+		if (temp->data.gpa > maxGpa)
+			maxGpa = temp->data.gpa;
+		temp = temp->next;
+	}
+
+	temp = *stdListptr;
+
+	printf("| %-4s | %-20s | %-6s | %-10s |\n", "ID", "Name", "Age", "GPA");
+	printf("|------|----------------------|--------|------------|\n");
+	while (temp != nullptr ) {
+		if (temp->data.gpa == maxGpa) {
+			printf("| %-4d | %-20s | %-6d | %-10.2f |\n", temp->data.id,
+					temp->data.name, temp->data.age, temp->data.gpa);
+		}
+		temp = temp->next;
+	}
+}
+
+// Free all nodes in the linked list and release allocated memory
+void freeStdList(node **stdListptr) {
+	node *temp = *stdListptr;
+
+	// Traverse the list and free each node
+	while (*stdListptr != nullptr ) {
+		temp = (*stdListptr)->next;
+		free(*stdListptr);
+		*stdListptr = temp;
+	}
+}

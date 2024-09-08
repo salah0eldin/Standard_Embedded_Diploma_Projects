@@ -1,0 +1,55 @@
+"Stduent Management System"
+
+//================================================
+//	Requirments
+//================================================
+1- add new student
+2- display all students
+3- search for student by id
+4- update student details
+5- calc avg gpa
+6- find max gpa
+//================================================
+
+//================================================
+//  Windows
+//================================================
+1- Main:
+	a- display main options:
+		1- Add 		  2- displayAll 3- searchById 4- updateById
+		5- deleteById 6- calcAvgGpa 7- getMaxGpa  8- Exit
+	b- take user input
+
+2- AddNewStudent:
+	a- take user inputs:
+		1- id 2- name 3- age 4- gpa
+	b- go to main
+	
+3- DisplayAllStudents:
+	a- display in organized way
+	b- go to main
+	 
+4- SearchById:
+	a- take id input
+	b- show data if exits
+	c- go to main
+	
+5- updateById:
+	a- take id input
+	b- ask for every input if want to change or not
+	c- go to main
+
+6- deleteById:
+	a- take id input
+	b- go to main
+	
+7- calcAvgGpa
+	a- show avg gpa
+	b- go to main
+	
+8- get max gpa student
+	a- show max student gpa data
+	b- go to main
+//================================================
+
+

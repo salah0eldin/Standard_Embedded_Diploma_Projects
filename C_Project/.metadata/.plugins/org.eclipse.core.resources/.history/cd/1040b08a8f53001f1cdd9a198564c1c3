@@ -1,0 +1,37 @@
+/*
+ * stdList.h
+ *
+ *  Created on: Aug 6, 2024
+ *      Author: dell
+ */
+
+#ifndef HEADERS_STDLIST_H_
+#define HEADERS_STDLIST_H_
+
+#ifndef nullptr
+#define nullptr (void*)0
+#endif
+
+typedef struct {
+	int id;
+	int age;
+	float gpa;
+	char name[50];
+} student;
+
+typedef struct node {
+	student data;
+	struct node *next;
+} node;
+
+int addStdToList(node **stdListptr,const student *std);
+
+void dispList(const node** stdListptr);
+
+node* findStudent(const node** stdListptr,const int id);
+
+void deleteStdFromLlist(node **stdListptr,int id);
+
+void freeStdList(node **stdListptr);
+
+#endif /* HEADERS_STDLIST_H_ */

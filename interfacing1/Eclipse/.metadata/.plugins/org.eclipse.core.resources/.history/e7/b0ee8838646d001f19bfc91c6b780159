@@ -1,0 +1,16 @@
+/*
+ * main.c
+ *
+ *  Created on: Sep 8, 2024
+ *      Author: Salah-Eldin
+ */
+
+int main(){
+
+	for(;;){
+
+	}
+
+	return 0;
+}
+

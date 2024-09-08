@@ -1,0 +1,68 @@
+/*
+ * main.c
+ *
+ *  Created on: Aug 5, 2024
+ *      Author: Salah Eldin
+ */
+
+#include "headers/projfuncs.h"
+
+// Main function
+int main() {
+	// Disable output buffering for stdout and stderr
+	setvbuf(stdout, NULL, _IONBF, 0);
+	setvbuf(stderr, NULL, _IONBF, 0);
+
+	// Initialize user choice for main menu
+	mainInput userChoice;
+
+	// Pointer to the head of the student list
+	node *stdList = nullptr;
+
+	// Array of function pointers for different operations
+	void (*funcArr[EXIT+1])(node**);
+
+	// Assign functions to the function pointer array
+	funcArr[ADD] = addStudent;
+	funcArr[DISPLAY] = dispAllStudents;
+	funcArr[SEARCH] = searchById;
+	funcArr[UPDATE] = updateById;
+	funcArr[DELETE] = deleteById;
+	funcArr[AVGGPA] = calcAvgGpa;
+	funcArr[MAXGPA] = getMaxGpa;
+	funcArr[EXIT] = endProgram;
+
+	// Main loop to handle user input and execute corresponding functions
+	for (;;) {
+		showMainWindow(&userChoice);
+
+		// Check if user choice is within valid range and execute the corresponding function
+		if (userChoice >= ADD && userChoice <= EXIT)
+			(*funcArr[userChoice])(&stdList);
+	}
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

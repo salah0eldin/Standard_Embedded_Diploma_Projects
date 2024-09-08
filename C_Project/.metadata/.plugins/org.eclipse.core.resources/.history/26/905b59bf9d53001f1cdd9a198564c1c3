@@ -1,0 +1,230 @@
+/*
+ * projfuncs.c
+ *
+ *  Created on: Aug 5, 2024
+ *      Author: Salah Eldin
+ */
+
+#include "../headers/projfuncs.h"
+
+// ANSI color codes
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+
+// Display the main menu and get the user's choice
+void showMainWindow(mainInput *userChoice) {
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                  MAIN WINDOW                      |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    printf(CYAN "|  %d- " RESET YELLOW "Add new student" RESET CYAN "         %d- " RESET YELLOW "Delete by ID" RESET CYAN "       |\n", ADD, DELETE);
+    printf(CYAN "|  %d- " RESET YELLOW "Display all students" RESET CYAN "    %d- " RESET YELLOW "Calculate AVG GPA" RESET CYAN "  |\n", DISPLAY, AVGGPA);
+    printf(CYAN "|  %d- " RESET YELLOW "Search by ID" RESET CYAN "            %d- " RESET YELLOW "Get max GPA ID" RESET CYAN "     |\n", SEARCH, MAXGPA);
+    printf(CYAN "|  %d- " RESET YELLOW "Update by ID" RESET CYAN "            %d- " RESET YELLOW "Exit" RESET CYAN "               |\n", UPDATE, EXIT);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    printf(CYAN "| Enter your choice: " RESET);
+    scanf("%d", (int*) userChoice);
+    puts(CYAN "|___________________________________________________|" RESET);
+}
+
+// Free all allocated memory and exit the program
+void endProgram(node **stdListptr) {
+    freeStdList(stdListptr);
+
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                  EXIT BYE BYE                     |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    exit(0);
+}
+
+// Add a new student to the list
+void addStudent(node **stdListptr) {
+    student std;
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                 ADD STUDENT                       |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    printf(CYAN "| Student ID: " RESET);
+    scanf("%d", &std.id);
+    getchar();  // Clear newline character from input buffer
+    printf(CYAN "| Student Name: " RESET);
+    gets(std.name);  // Read student name
+    printf(CYAN "| Student Age: " RESET);
+    scanf("%d", &std.age);
+    // Check if age is within the valid range (optional validation)
+    // if (std.age > 30 || std.age < 10) {
+    //     puts(CYAN "|                                                   |" RESET);
+    //     puts(CYAN "|        Age can't be out of range (10 -> 30)       |" RESET);
+    //     puts(CYAN "|___________________________________________________|" RESET);
+    //     return;
+    // }
+    printf(CYAN "| Student GPA: " RESET);
+    scanf("%f", &std.gpa);
+    // Check if GPA is within the valid range
+    if (std.gpa > 4 || std.gpa < 0) {
+        puts(CYAN "|                                                   |" RESET);
+        puts(RED "|        GPA can't be out of range (0 -> 4)         |" RESET);
+        puts(CYAN "|___________________________________________________|" RESET);
+        return;
+    }
+    // Add student to list and handle duplicate ID
+    if (ID_TOKEN == addStdToList(stdListptr, &std)) {
+        puts(CYAN "|                                                   |" RESET);
+        puts(RED "|           ID is taken, choose another one          |" RESET);
+    } else {
+        puts(CYAN "|                                                   |" RESET);
+        puts(GREEN "|                Added successfully                 |" RESET);
+    }
+    puts(CYAN "|___________________________________________________|" RESET);
+}
+
+// Display all students in the list
+void dispAllStudents(node **stdListptr) {
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                   STUDENT LIST                    |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    // Check if list is empty
+    if (*stdListptr == nullptr)
+        puts(CYAN "|                    EMPTY LIST                     |" RESET);
+    else
+        dispList(stdListptr);
+    puts(CYAN "|___________________________________________________|" RESET);
+}
+
+// Search for a student by ID and display their information
+void searchById(node **stdListptr) {
+    int id;
+
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                  STUDENT By ID                    |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    printf(CYAN "| Enter Student ID: " RESET);
+    scanf("%d", &id);
+    node *std = findStudent(stdListptr, id);
+    if (std == nullptr) {
+        puts(CYAN "|                No student matches this ID         |" RESET);
+    } else {
+        printf(CYAN "| %-4s | %-20s | %-6s | %-10s |\n" RESET, "ID", "Name", "Age", "GPA");
+        printf(CYAN "|------|----------------------|--------|------------|\n" RESET);
+        printf(CYAN "| %-4d | %-20s | %-6d | %-10.2f |\n" RESET, std->data.id,
+                std->data.name, std->data.age, std->data.gpa);
+    }
+    puts(CYAN "|___________________________________________________|" RESET);
+}
+
+// Update a student's information by ID
+void updateById(node **stdListptr) {
+    int id;
+    student std;
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                  UPDATE By ID                     |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    printf(CYAN "| Enter Student ID: " RESET);
+    scanf("%d", &id);
+    node *stdptr = findStudent(stdListptr, id);
+    if (stdptr == nullptr) {
+        puts(CYAN "|                No student matches this ID         |" RESET);
+        puts(CYAN "|___________________________________________________|" RESET);
+        return;
+    } else {
+        printf(CYAN "| %-4s | %-20s | %-6s | %-10s |\n" RESET, "ID", "Name", "Age", "GPA");
+        printf(CYAN "|------|----------------------|--------|------------|\n" RESET);
+        printf(CYAN "| %-4d | %-20s | %-6d | %-10.2f |\n" RESET, stdptr->data.id,
+                stdptr->data.name, stdptr->data.age, stdptr->data.gpa);
+        printf(CYAN "| NEW ID: " RESET);
+        scanf("%d", &std.id);
+        getchar();  // Clear newline character from input buffer
+        printf(CYAN "| NEW Name: " RESET);
+        gets(std.name);  // Read new student name
+        printf(CYAN "| NEW Age: " RESET);
+        scanf("%d", &std.age);
+        // Check if new GPA is within the valid range
+        // if (std.age > 30 || std.age < 10) {
+        //     puts(CYAN "|                                                   |" RESET);
+        //     puts(CYAN "|        Age can't be out of range (10 -> 30)       |" RESET);
+        //     puts(CYAN "|___________________________________________________|" RESET);
+        //     return;
+        // }
+        printf(CYAN "| NEW GPA: " RESET);
+        scanf("%f", &std.gpa);
+        if (std.gpa > 4 || std.gpa < 0) {
+            puts(CYAN "|                                                   |" RESET);
+            puts(RED "|        GPA can't be out of range (0 -> 4)         |" RESET);
+            puts(CYAN "|___________________________________________________|" RESET);
+            return;
+        }
+    }
+
+    // Update student information in the list
+    updateStdFromList(stdListptr, stdptr->data.id, &std);
+
+    puts(GREEN "|                Updated successfully               |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+}
+
+// Delete a student from the list by ID
+void deleteById(node **stdListptr) {
+    int id;
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                  DELETE By ID                     |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    printf(CYAN "| Enter Student ID: " RESET);
+    scanf("%d", &id);
+    switch (deleteStdFromLlist(stdListptr, id)) {
+        case ID_NOT_FOUND:
+            puts(CYAN "|                No student matches this ID         |" RESET);
+            break;
+
+        case SUCCESS:
+            puts(GREEN "|                Deleted successfully                |" RESET);
+            break;
+        default:
+            puts(RED "|                    Error occurred                   |" RESET);
+            break;
+    }
+    puts(CYAN "|___________________________________________________|" RESET);
+}
+
+// Calculate the average GPA of all students in the list
+void calcAvgGpa(node **stdListptr) {
+    float avgGPA = calcAvgGpaList(stdListptr);
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|               CALCULATE AVERAGE GPA                |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    printf(CYAN "| Average GPA: " RESET GREEN "%.2f" RESET CYAN "                      |\n", avgGPA);
+    puts(CYAN "|___________________________________________________|" RESET);
+}
+
+// Get the ID of the student with the maximum GPA
+void getMaxGpa(node **stdListptr) {
+    int maxGPAId = getMaxGpaList(stdListptr);
+    puts(CYAN " ___________________________________________________ " RESET);
+    puts(CYAN "|                                                   |" RESET);
+    puts(CYAN "|                STUDENT WITH MAX GPA               |" RESET);
+    puts(CYAN "|___________________________________________________|" RESET);
+    puts(CYAN "|                                                   |" RESET);
+    if (maxGPAId != -1) {
+        printf(CYAN "| Student ID with max GPA: " RESET GREEN "%d" RESET CYAN "                |\n", maxGPAId);
+    } else {
+        puts(RED "| No students found in the list                     |" RESET);
+    }
+    puts(CYAN "|___________________________________________________|" RESET);
+}

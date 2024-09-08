@@ -1,0 +1,22 @@
+/*
+ * projfuncs.h
+ *
+ *  Created on: Aug 5, 2024
+ *      Author: dell
+ */
+
+#ifndef HEADERS_PROJFUNCS_H_
+#define HEADERS_PROJFUNCS_H_
+
+#include <stdlib.h>
+#include <windows.h>
+
+
+typedef enum{
+	MAIN,ADD,DISPLAY,SEARCH,UPDATE,AVGGPA,MAXGPA,EXIT
+} mainInput;
+
+// Function to clear the screen
+void clearScreen();
+
+#endif /* HEADERS_PROJFUNCS_H_ */

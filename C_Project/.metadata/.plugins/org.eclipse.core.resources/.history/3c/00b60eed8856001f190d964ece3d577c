@@ -1,0 +1,105 @@
+/*
+ * stdList.h
+ *
+ *  Created on: Aug 6, 2024
+ *      Author: Salah Eldin
+ */
+
+#ifndef HEADERS_STDLIST_H_
+#define HEADERS_STDLIST_H_
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifndef nullptr
+#define nullptr (void*)0
+#endif
+
+#define NAME_BUFFER_SIZE	20 // changed from 50 to 20 just for shortenning the output
+
+// Enum for list operation errors
+typedef enum {
+	SUCCESS, ID_TOKEN, ID_NOT_FOUND, CANCEL, EMPTY
+} LIST_ERRORS;
+
+// Structure representing a student
+typedef struct {
+	int id;        ///< Student ID
+	int age;       ///< Student age
+	float gpa;     ///< Student GPA
+	char name[NAME_BUFFER_SIZE]; ///< Student name
+} student;
+
+// Node structure for the linked list
+typedef struct node {
+	student data;          ///< Data of the student
+	struct node *next;    ///< Pointer to the next node
+} node;
+
+/**
+ * @brief Add a student to the list.
+ *
+ * @param stdListptr Pointer to the head of the student list.
+ * @param std Pointer to the student to be added.
+ * @return int Returns 0 on success, or an error code.
+ */
+int addStdToList(node **stdListptr, student *std);
+
+/**
+ * @brief Display all students in the list.
+ *
+ * @param stdListptr Pointer to the head of the student list.
+ */
+void dispList(node **stdListptr);
+
+/**
+ * @brief Find a student by ID.
+ *
+ * @param stdListptr Pointer to the head of the student list.
+ * @param id The ID of the student to find.
+ * @return node* Pointer to the node containing the student, or NULL if not found.
+ */
+node* findStudent(node **stdListptr, int id);
+
+/**
+ * @brief Update a student's information in the list.
+ *
+ * @param stdOld Pointer to the node of the student information.
+ * @param std Pointer to the node containing updated student information.
+ */
+void updateStdFromList(student *stdOld, student *std);
+
+/**
+ * @brief Delete a student from the list by ID.
+ *
+ * @param stdListptr Pointer to the head of the student list.
+ * @param id The ID of the student to delete.
+ * @return int Returns 0 on success, or an error code.
+ */
+int deleteStdFromList(node **stdListptr, int id);
+
+/**
+ * @brief Calculate the average GPA of all students in the list.
+ *
+ * @param stdListptr Pointer to the head of the student list.
+ * @return float The average GPA of the students.
+ */
+float calcAvgGpaList(node **stdListptr);
+
+/**
+ * @brief Get the node with the highest GPA.
+ *
+ * @param stdListptr Pointer to the head of the student list.
+ * @return node* Pointer to the node with the highest GPA, or NULL if the list is empty.
+ */
+void getMaxGpaList(node **stdListptr);
+
+/**
+ * @brief Free all nodes in the student list and release allocated memory.
+ *
+ * @param stdListptr Pointer to the head of the student list.
+ */
+void freeStdList(node **stdListptr);
+
+#endif /* HEADERS_STDLIST_H_ */

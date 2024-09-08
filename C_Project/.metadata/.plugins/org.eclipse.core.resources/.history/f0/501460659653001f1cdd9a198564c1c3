@@ -1,0 +1,137 @@
+/*
+ * stdList.c
+ *
+ *  Created on: Aug 6, 2024
+ *      Author: dell
+ */
+#include "../headers/stdList.h"
+
+int addStdToList(node **stdListptr, student *std) {
+
+	node *temp, *prevTemp;
+	temp = prevTemp = *stdListptr;
+
+	while (temp != nullptr ) {
+		if (temp->data.id > std->id)
+			break;
+		else if (temp->data.id == std->id)
+			return ID_TOKEN;
+
+		prevTemp = temp;
+		temp = temp->next;
+	}
+
+	node *newStd = (node*) malloc(sizeof(node));
+	newStd->data = *std;
+
+	if (temp == *stdListptr) {
+		newStd->next = *stdListptr;
+		*stdListptr = newStd;
+	} else {
+		newStd->next = temp;
+		prevTemp->next = newStd;
+	}
+	return SUCCESS;
+}
+
+void dispList(node **stdListptr) {
+	node *temp = *stdListptr;
+	// Print the header
+	printf("| %-4s | %-20s | %-6s | %-10s |\n", "ID", "Name", "Age", "GPA");
+
+	while (temp != nullptr ) {
+		printf("|------|----------------------|--------|------------|\n");
+		printf("| %-4d | %-20s | %-6d | %-10.2f |\n", temp->data.id,
+				temp->data.name, temp->data.age, temp->data.gpa);
+		temp = temp->next;
+	}
+}
+
+node* findStudent(node **stdListptr, int id) {
+	node *std = *stdListptr;
+	while (std != nullptr ) {
+		if (std->data.id == id)
+			break;
+		else if (std->data.id > id)
+			return nullptr ;
+		std = std->next;
+	}
+	return std;
+}
+
+void updateStdFromList(node **stdListptr, int id, node *std) {
+	node *temp, *prevTemp;
+	temp = prevTemp = *stdListptr;
+
+	while (temp) {
+		if (temp->data.id == id)
+			break;
+		prevTemp = temp;
+		temp = temp->next;
+	}
+	if (temp == *stdListptr) {
+		*stdListptr = temp->next;
+	} else {
+		prevTemp->next = temp->next;
+	}
+	free(temp);
+	addStdToList(stdListptr, std);
+}
+
+int deleteStdFromLlist(node **stdListptr, int id) {
+	node *temp, *prevTemp;
+	temp = prevTemp = *stdListptr;
+
+	while (temp) {
+		if (temp->data.id == id)
+			break;
+		prevTemp = temp;
+		temp = temp->next;
+	}
+	if (temp == nullptr)
+		return ID_NOT_FOUND;
+	char c;
+	puts("| Are you sure you want to delete this student:     |");
+	printf("| %-4s | %-20s | %-6s | %-10s |\n", "ID", "Name", "Age", "GPA");
+	printf("|------|----------------------|--------|------------|\n");
+	printf("| %-4d | %-20s | %-6d | %-10.2f |\n", temp->data.id,
+			temp->data.name, temp->data.age, temp->data.gpa);
+	getchar();
+	printf("| yes or no (y/n): ");
+	scanf("%c", &c);
+	if (c == 'y') {
+		if (temp == *stdListptr) {
+			*stdListptr = temp->next;
+		} else {
+			prevTemp->next = temp->next;
+		}
+		free(temp);
+		return SUCCESS;
+	} else {
+		return CANCEL;
+	}
+}
+
+void freeStdList(node **stdListptr) {
+	node *temp = *stdListptr;
+	while (*stdListptr != nullptr ) {
+		temp = (*stdListptr)->next;
+		free(*stdListptr);
+		*stdListptr = temp;
+	}
+}
+
+float calcAvgGpaList(node **stdListptr) {
+	float sum = 0;
+	int count = 0;
+
+	node *temp = *stdListptr;
+	while (temp) {
+		sum += temp->data->gpa;
+		count++;
+		temp = temp->next;
+	}
+
+	return sum / count;
+}
+

@@ -1,0 +1,38 @@
+/*
+ * application.c
+ *
+ *  Created on: Sep 8, 2024
+ *      Author: Salah-Eldin
+ */
+
+#include "application.h"
+
+void leds_init(void) {
+	DDRD |= _BV(4) | _BV(5);
+	PORTD &= ~_BV(4) & ~_BV(5);
+}
+void buzzer_init(void) {
+
+}
+void seven_segment_pins_init(void) {
+
+}
+void adjust_time_buttons_init(void) {
+
+}
+void count_mode_button_init(void) {
+
+}
+void reset_button_int0_init(void) {
+
+}
+void pause_button_int1_init(void) {
+
+}
+void resume_button_int2_init(void) {
+
+}
+
+void timer1_init(void) {
+
+}

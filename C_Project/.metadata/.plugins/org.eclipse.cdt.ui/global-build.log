@@ -1,0 +1,48 @@
+22:48:14 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o "sources\\projfuncs.o" "..\\sources\\projfuncs.c" 
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+Info: Nothing to build for StdManageSystem
+22:49:25 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o "sources\\projfuncs.o" "..\\sources\\projfuncs.c" 
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot open output file StdManageSystem.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
+22:49:32 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+22:52:42 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o "sources\\projfuncs.o" "..\\sources\\projfuncs.c" 
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o "sources\\stdList.o" "..\\sources\\stdList.c" 
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o main.o "..\\main.c" 
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot open output file StdManageSystem.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
+22:52:47 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+22:58:22 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o "sources\\stdList.o" "..\\sources\\stdList.c" 
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o "sources\\projfuncs.o" "..\\sources\\projfuncs.c" 
+..\sources\projfuncs.c: In function 'updateById':
+..\sources\projfuncs.c:169:18: warning: format '%f' expects argument of type 'float *', but argument 2 has type 'int *' [-Wformat=]
+   while (scanf("%f", &std.age) != 1) {
+                  ^
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot open output file StdManageSystem.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
+22:58:28 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+23:00:04 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc "-ID:\\Learning\\Embedded Tarek\\C\\C Project\\Salah_C_Project\\StdManageSystem" -O0 -g3 -Wall -c -fmessage-length=0 -o "sources\\projfuncs.o" "..\\sources\\projfuncs.c" 
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot open output file StdManageSystem.exe: Permission denied
+collect2.exe: error: ld returned 1 exit status
+23:00:09 **** Incremental Build of configuration Debug for project StdManageSystem ****
+Info: Internal Builder is used for build
+gcc -o StdManageSystem.exe main.o "sources\\projfuncs.o" "sources\\stdList.o" 

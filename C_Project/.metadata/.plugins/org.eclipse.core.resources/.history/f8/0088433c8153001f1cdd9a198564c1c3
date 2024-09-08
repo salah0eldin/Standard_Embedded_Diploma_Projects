@@ -1,0 +1,50 @@
+/*
+ * main.c
+ *
+ *  Created on: Aug 5, 2024
+ *      Author: Salah Eldin
+ */
+
+#include "headers/projfuncs.h"
+
+int main() {
+
+	setvbuf(stdout, NULL, _IONBF, 0);
+	setvbuf(stderr, NULL, _IONBF, 0);
+
+	mainInput userChoice = MAIN;
+
+	node* stdList = nullptr;
+
+	while (1) {
+		switch (userChoice) {
+		case ADD:
+			addStudent(&stdList);
+			break;
+		case DISPLAY:
+			dispAllStudents(stdList);
+			break;
+		case SEARCH:
+			searchById(stdList);
+			break;
+		case UPDATE:
+			break;
+		case AVGGPA:
+			break;
+		case MAXGPA:
+			break;
+		}
+		showMainWindow();
+		scanf("%d", (int*) &userChoice);
+
+		if (userChoice == EXIT)
+			break;
+	}
+
+	puts(" ___________________________________________________ ");
+	puts("|                                                   |");
+	puts("|                  EXIT BYE BYE                     |");
+	puts("|___________________________________________________|");
+
+	return 0;
+}

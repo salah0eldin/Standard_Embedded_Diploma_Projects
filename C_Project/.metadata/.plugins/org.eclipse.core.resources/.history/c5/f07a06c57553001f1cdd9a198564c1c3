@@ -1,0 +1,23 @@
+/*
+ * stdList.h
+ *
+ *  Created on: Aug 6, 2024
+ *      Author: dell
+ */
+
+#ifndef HEADERS_STDLIST_H_
+#define HEADERS_STDLIST_H_
+
+typedef struct{
+	int id;
+	int age;
+	float gpa;
+	char name[50];
+} student;
+
+typedef struct node{
+	student data;
+	struct node* next;
+} node;
+
+#endif /* HEADERS_STDLIST_H_ */
