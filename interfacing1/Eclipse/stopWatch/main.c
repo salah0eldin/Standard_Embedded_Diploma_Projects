@@ -86,11 +86,25 @@ static inline void handle_seconds_change_buttons(void); // Handle second increme
 // Data types declarations
 //===========================================
 volatile struct time_t {
+	uint32_t total_Seconds; // To store a value of seconds for 24 hours -1 second = 86399
 	uint8_t seconds;
 	uint8_t minutes;
 	uint8_t hours;
-	uint32_t total_Seconds;
 } time; // Struct to hold time values in hours, minutes, seconds, and total seconds
+
+union flag {
+	struct {
+		uint8_t modeFlag :1;  	   // Flag for mode button state change
+		uint8_t hoursIncFlag :1;   // Flag for hour increment button
+		uint8_t hoursDecFlag :1;   // Flag for hour decrement button
+		uint8_t minutesIncFlag :1; // Flag for minute increment button
+		uint8_t minutesDecFlag :1; // Flag for minute decrement button
+		uint8_t secondsIncFlag :1; // Flag for second increment button
+		uint8_t secondsDecFlag :1; // Flag for second decrement button
+		uint8_t :1;	   // Reserved
+	};
+	uint8_t allFlags;
+} flags; // Struct to hold the values of the flags for buttons
 
 //===========================================
 // Global variables
@@ -100,14 +114,6 @@ volatile uint8_t timer1_ticks = ZERO_INIT;  // Keeps track of Timer1 ticks
 volatile uint8_t paused = ZERO_INIT;  // Indicates if the counting is paused
 
 uint8_t mode = COUNT_UP_MODE; // Variable to store the current mode (up/down count)
-
-uint8_t modeFlag;  		// Flag for mode button state change
-uint8_t hoursIncFlag; 	// Flag for hour increment button
-uint8_t hoursDecFlag;  	// Flag for hour decrement button
-uint8_t minutesIncFlag; // Flag for minute increment button
-uint8_t minutesDecFlag; // Flag for minute decrement button
-uint8_t secondsIncFlag; // Flag for second increment button
-uint8_t secondsDecFlag; // Flag for second decrement button
 
 //===========================================
 // main function
@@ -142,7 +148,8 @@ int main() {
 		check_update_mode();
 
 		// Activate alarm if in count-down mode and time reaches zero
-		if (!paused && COUNT_DOWN_MODE == mode && !time.total_Seconds)
+		if (FALSE == paused && COUNT_DOWN_MODE == mode
+				&& ZERO_INIT == time.total_Seconds)
 			ACTIVATE_ALARM;  	// Activate alarm (turn on buzzer)
 		else
 			DEACTIVATE_ALARM;	// Deactivate alarm (turn off buzzer)
@@ -189,6 +196,9 @@ static inline void adjust_time_buttons_init(void) {
 	DDRB &= 0b10000100;
 	// pull-ups enabled
 	PORTB |= 0b01111011;
+
+	// Ensure flags are FALSE at start
+	flags.allFlags = FALSE;
 }
 
 static inline void count_mode_button_init(void) {
@@ -230,12 +240,18 @@ static inline void timer1_init(void) {
 	TCNT1 = 0;  		  // Initialize counter
 	OCR1A = 15624; // Set the output compare register to achieve a 1-second interval (16 MHz clock)
 	TIMSK |= _BV(OCIE1A); // Enable output compare interrupt for Timer1
+
+	// Ensure Start from 00:00:00
+	time.hours = ZERO_INIT;
+	time.minutes = ZERO_INIT;
+	time.seconds = ZERO_INIT;
+	time.total_Seconds = ZERO_INIT;
 }
 
 //===========================================
 // Timer ISR (Interrupt Service Routine)
 //===========================================
-ISR(TIMER1_COMPA_vect) {
+ISR( TIMER1_COMPA_vect) {
 	// Timer1 interrupt occurs every 1 second (as configured by OCR1A)
 	timer1_ticks++;  // Increment tick count
 }
@@ -243,24 +259,26 @@ ISR(TIMER1_COMPA_vect) {
 //===========================================
 // External Interrupt Service Routines
 //===========================================
-
 // INT0 ISR - Reset button handler
-ISR(INT0_vect) {
+ISR( INT0_vect) {
 	// Reset time to zero (00:00:00)
 	time.total_Seconds = ZERO_INIT;
 	time.hours = ZERO_INIT;
 	time.minutes = ZERO_INIT;
 	time.seconds = ZERO_INIT;
+	// Reset timer ticks & timer register to start counting from 0
+	timer1_ticks = ZERO_INIT;
+	TCNT1 = ZERO_INIT;
 }
 
 // INT1 ISR - Pause button handler
-ISR(INT1_vect) {
+ISR( INT1_vect) {
 	paused = TRUE;  // Set paused flag to true
 	TCCR1B &= ~_BV(CS10) & ~_BV(CS12); // Disable the timer by clearing the CS10 and CS12 bits (stops the timer)
 }
 
 // INT2 ISR - Resume button handler
-ISR(INT2_vect) {
+ISR( INT2_vect) {
 	paused = FALSE;  // Set paused flag to false
 	TCCR1B |= _BV(CS10) | _BV(CS12); // Enable the timer by setting the CS10 and CS12 bits (starts the timer with frequency = Fosc/1024)
 }
@@ -331,7 +349,7 @@ static inline void display_time(void) {
 static inline void check_update_mode(void) {
 	// Check if the mode button has been pressed
 	if (BUTTON_PRESSED == MODE_BUTTON_STATE) {
-		if (ZERO_INIT == modeFlag) {
+		if (ZERO_INIT == flags.modeFlag) {
 			// Toggle mode between count up and count down
 			if (COUNT_UP_MODE == mode) {
 				mode = COUNT_DOWN_MODE;
@@ -341,10 +359,10 @@ static inline void check_update_mode(void) {
 				PORTD = (PORTD & ~_BV(5)) | _BV(4);
 			}
 
-			modeFlag = TRUE;  // Set flag to indicate button press handled
+			flags.modeFlag = TRUE;  // Set flag to indicate button press handled
 		}
 	} else {
-		modeFlag = FALSE;  // Reset flag when button is released
+		flags.modeFlag = FALSE;  // Reset flag when button is released
 	}
 }
 
@@ -354,68 +372,68 @@ static inline void check_update_mode(void) {
 static inline void handle_hours_change_buttons(void) {
 	// Handle hour increment and decrement buttons
 	if (BUTTON_PRESSED == H_INC_BUTTON_STATE) {
-		if (FALSE == hoursIncFlag && time.hours < H_LIMIT) {
+		if (FALSE == flags.hoursIncFlag && time.hours < H_LIMIT) {
 			time.hours++;  // Increment hours
 			time.total_Seconds += H_TO_S_CONV; // Increment total seconds a hour
-			hoursIncFlag = TRUE;  // Set flag to indicate button press handled
+			flags.hoursIncFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
-		hoursIncFlag = FALSE;  // Reset flag when button is released
+		flags.hoursIncFlag = FALSE;  // Reset flag when button is released
 	}
 
 	if (BUTTON_PRESSED == H_DEC_BUTTON_STATE) {
-		if (FALSE == hoursDecFlag && time.hours > ZERO_INIT) {
+		if (FALSE == flags.hoursDecFlag && time.hours > ZERO_INIT) {
 			time.hours--;  // Decrement hours
 			time.total_Seconds -= H_TO_S_CONV; // Decrement total seconds a hour
-			hoursDecFlag = TRUE; // Set flag to indicate button press handled
+			flags.hoursDecFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
-		hoursDecFlag = FALSE; // Reset flag when button is released
+		flags.hoursDecFlag = FALSE; // Reset flag when button is released
 	}
 }
 
 static inline void handle_minutes_change_buttons(void) {
 	// Handle minute increment and decrement buttons
 	if (BUTTON_PRESSED == M_INC_BUTTON_STATE) {
-		if (FALSE == minutesIncFlag && time.minutes < S_M_LIMIT) {
+		if (FALSE == flags.minutesIncFlag && time.minutes < S_M_LIMIT) {
 			time.minutes++;  // Increment minutes
 			time.total_Seconds += M_TO_S_CONV; // Increment total seconds a minute
-			minutesIncFlag = TRUE; // Set flag to indicate button press handled
+			flags.minutesIncFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
-		minutesIncFlag = FALSE; // Reset flag when button is released
+		flags.minutesIncFlag = FALSE; // Reset flag when button is released
 	}
 
 	if (BUTTON_PRESSED == M_DEC_BUTTON_STATE) {
-		if (FALSE == minutesDecFlag && time.minutes > ZERO_INIT) {
+		if (FALSE == flags.minutesDecFlag && time.minutes > ZERO_INIT) {
 			time.minutes--;  // Decrement minutes
 			time.total_Seconds -= M_TO_S_CONV; // Decrement total seconds a minutes
-			minutesDecFlag = TRUE; // Set flag to indicate button press handled
+			flags.minutesDecFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
-		minutesDecFlag = FALSE; // Reset flag when button is released
+		flags.minutesDecFlag = FALSE; // Reset flag when button is released
 	}
 }
 
 static inline void handle_seconds_change_buttons(void) {
 	// Handle second increment and decrement buttons
 	if (BUTTON_PRESSED == S_INC_BUTTON_STATE) {
-		if (FALSE == secondsIncFlag && time.seconds < S_M_LIMIT) {
+		if (FALSE == flags.secondsIncFlag && time.seconds < S_M_LIMIT) {
 			time.seconds++;  // Increment seconds
 			time.total_Seconds++; // Increment total seconds
-			secondsIncFlag = TRUE; // Set flag to indicate button press handled
+			flags.secondsIncFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
-		secondsIncFlag = FALSE; // Reset flag when button is released
+		flags.secondsIncFlag = FALSE; // Reset flag when button is released
 	}
 
 	if (BUTTON_PRESSED == S_DEC_BUTTON_STATE) {
-		if (FALSE == secondsDecFlag && time.seconds > ZERO_INIT) {
+		if (FALSE == flags.secondsDecFlag && time.seconds > ZERO_INIT) {
 			time.seconds--;  // Decrement seconds
 			time.total_Seconds--; // Decrement total seconds
-			secondsDecFlag = TRUE; // Set flag to indicate button press handled
+			flags.secondsDecFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
-		secondsDecFlag = FALSE; // Reset flag when button is released
+		flags.secondsDecFlag = FALSE; // Reset flag when button is released
 	}
 }

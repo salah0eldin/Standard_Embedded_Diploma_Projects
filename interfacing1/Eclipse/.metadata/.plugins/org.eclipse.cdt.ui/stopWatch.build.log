@@ -1,4 +1,4 @@
-01:19:59 **** Incremental Build of configuration Debug for project stopWatch ****
+18:27:21 **** Incremental Build of configuration Debug for project stopWatch ****
 make all 
 Building file: ../main.c
 Invoking: AVR Compiler
@@ -22,15 +22,15 @@ AVR Memory Usage
 ----------------
 Device: atmega32
 
-Program:    6956 bytes (21.2% Full)
+Program:    7092 bytes (21.6% Full)
 (.text + .data + .bootloader)
 
-Data:         25 bytes (1.2% Full)
+Data:         19 bytes (0.9% Full)
 (.data + .bss + .noinit)
 
 
 Finished building: sizedummy
  
 
-01:20:00 Build Finished. 0 errors, 1 warnings. (took 723ms)
+18:27:22 Build Finished. 0 errors, 1 warnings. (took 822ms)
 
