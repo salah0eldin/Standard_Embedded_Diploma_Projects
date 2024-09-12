@@ -101,7 +101,7 @@ union flags_t {
 		uint8_t minutesDecFlag :1; // Flag for minute decrement button
 		uint8_t secondsIncFlag :1; // Flag for second increment button
 		uint8_t secondsDecFlag :1; // Flag for second decrement button
-		uint8_t pausedFlag :1;	   // Flag for counting pause state
+		uint8_t pausedFlag	:1;	   // Flag for counting pause state
 	};
 	uint8_t allFlags;
 } flags; // Struct to hold the values of the flags for buttons
@@ -370,14 +370,9 @@ static inline void check_update_mode(void) {
 static inline void handle_hours_change_buttons(void) {
 	// Handle hour increment and decrement buttons
 	if (BUTTON_PRESSED == H_INC_BUTTON_STATE) {
-		if (FALSE == flags.hoursIncFlag) {
-			if (time.hours < H_LIMIT) {
-				time.hours++;  // Increment hours
-				time.total_Seconds += H_TO_S_CONV; // Increment total seconds a hour
-			} else {
-				time.hours = ZERO_INIT; // Reset hours and total seconds
-				time.total_Seconds = time.minutes * M_TO_S_CONV + time.seconds;
-			}
+		if (FALSE == flags.hoursIncFlag && time.hours < H_LIMIT) {
+			time.hours++;  // Increment hours
+			time.total_Seconds += H_TO_S_CONV; // Increment total seconds a hour
 			flags.hoursIncFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
@@ -385,14 +380,9 @@ static inline void handle_hours_change_buttons(void) {
 	}
 
 	if (BUTTON_PRESSED == H_DEC_BUTTON_STATE) {
-		if (FALSE == flags.hoursDecFlag) {
-			if (time.hours > ZERO_INIT) {
-				time.hours--;  // Decrement hours
-				time.total_Seconds -= H_TO_S_CONV; // Decrement total seconds a hour
-			} else {
-				time.hours = H_LIMIT; // Fix hours and total seconds
-				time.total_Seconds += (uint32_t) H_TO_S_CONV * H_LIMIT;
-			}
+		if (FALSE == flags.hoursDecFlag && time.hours > ZERO_INIT) {
+			time.hours--;  // Decrement hours
+			time.total_Seconds -= H_TO_S_CONV; // Decrement total seconds a hour
 			flags.hoursDecFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
@@ -403,14 +393,9 @@ static inline void handle_hours_change_buttons(void) {
 static inline void handle_minutes_change_buttons(void) {
 	// Handle minute increment and decrement buttons
 	if (BUTTON_PRESSED == M_INC_BUTTON_STATE) {
-		if (FALSE == flags.minutesIncFlag) {
-			if (time.minutes < S_M_LIMIT) {
-				time.minutes++;  // Increment minutes
-				time.total_Seconds += M_TO_S_CONV; // Increment total seconds a minute
-			} else {
-				time.minutes = ZERO_INIT; // Reset minutes and total seconds;
-				time.total_Seconds -= M_TO_S_CONV * S_M_LIMIT;
-			}
+		if (FALSE == flags.minutesIncFlag && time.minutes < S_M_LIMIT) {
+			time.minutes++;  // Increment minutes
+			time.total_Seconds += M_TO_S_CONV; // Increment total seconds a minute
 			flags.minutesIncFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
@@ -418,14 +403,9 @@ static inline void handle_minutes_change_buttons(void) {
 	}
 
 	if (BUTTON_PRESSED == M_DEC_BUTTON_STATE) {
-		if (FALSE == flags.minutesDecFlag) {
-			if (time.minutes > ZERO_INIT) {
-				time.minutes--;  // Decrement minutes
-				time.total_Seconds -= M_TO_S_CONV; // Decrement total seconds a minutes
-			} else {
-				time.minutes = S_M_LIMIT; // Fix minutes and total seconds
-				time.total_Seconds += M_TO_S_CONV * S_M_LIMIT;
-			}
+		if (FALSE == flags.minutesDecFlag && time.minutes > ZERO_INIT) {
+			time.minutes--;  // Decrement minutes
+			time.total_Seconds -= M_TO_S_CONV; // Decrement total seconds a minutes
 			flags.minutesDecFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
@@ -436,14 +416,9 @@ static inline void handle_minutes_change_buttons(void) {
 static inline void handle_seconds_change_buttons(void) {
 	// Handle second increment and decrement buttons
 	if (BUTTON_PRESSED == S_INC_BUTTON_STATE) {
-		if (FALSE == flags.secondsIncFlag) {
-			if (time.seconds < S_M_LIMIT) {
-				time.seconds++;  // Increment seconds
-				time.total_Seconds++; // Increment total seconds
-			} else {
-				time.seconds = ZERO_INIT; // Reset seconds and total seconds
-				time.total_Seconds -= S_M_LIMIT;
-			}
+		if (FALSE == flags.secondsIncFlag && time.seconds < S_M_LIMIT) {
+			time.seconds++;  // Increment seconds
+			time.total_Seconds++; // Increment total seconds
 			flags.secondsIncFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
@@ -451,14 +426,9 @@ static inline void handle_seconds_change_buttons(void) {
 	}
 
 	if (BUTTON_PRESSED == S_DEC_BUTTON_STATE) {
-		if (FALSE == flags.secondsDecFlag) {
-			if (time.seconds > ZERO_INIT) {
-				time.seconds--;  // Decrement seconds
-				time.total_Seconds--; // Decrement total seconds
-			} else {
-				time.seconds = S_M_LIMIT; // Fix seconds and total seconds
-				time.total_Seconds += S_M_LIMIT;
-			}
+		if (FALSE == flags.secondsDecFlag && time.seconds > ZERO_INIT) {
+			time.seconds--;  // Decrement seconds
+			time.total_Seconds--; // Decrement total seconds
 			flags.secondsDecFlag = TRUE; // Set flag to indicate button press handled
 		}
 	} else {
