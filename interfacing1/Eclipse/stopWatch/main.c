@@ -61,6 +61,7 @@
 // Activate and deactivate the alarm pin
 #define ACTIVATE_ALARM   (PORTD |= _BV(0))
 #define DEACTIVATE_ALARM (PORTD &= ~_BV(0))
+
 //===========================================
 // Functions declarations
 //===========================================
@@ -197,6 +198,7 @@ static inline void adjust_time_buttons_init(void) {
 
 	// Ensure flags are FALSE at start
 	flags.allFlags = FALSE;
+	flags.modeFlag = COUNT_UP_MODE;
 }
 
 static inline void count_mode_button_init(void) {
