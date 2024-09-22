@@ -2,12 +2,6 @@
 
 Welcome to the Standard Embedded Diploma Projects repository! This repository contains all the projects I worked on during the Standard Embedded Diploma program under the guidance of Eng. Mohammed Tarek.
 
-## Table of Contents
-- Projects
-- Getting Started
-- Contributing
-- License
-
 ## Projects
 ### 1. C Project: Student Management System
 - **Description**: A console-based application to manage student records using C programming.
