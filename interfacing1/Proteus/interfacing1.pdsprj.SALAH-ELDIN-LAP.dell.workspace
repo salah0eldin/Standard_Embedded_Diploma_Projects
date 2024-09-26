@@ -31,7 +31,7 @@
      <ITEM name="nItems">0</ITEM>
     </PROPERTIES>
    </POPUP>
-   <POPUP w="226" x="78" flags="00000008" y="169" h="215" pid="3" iid="1">
+   <POPUP w="226" x="224" flags="00000009" y="88" h="215" pid="3" iid="1">
     <PROPERTIES/>
    </POPUP>
    <POPUP w="8" x="98" flags="0000000a" y="189" h="1" pid="10" iid="1">
@@ -64,7 +64,7 @@
      <ITEM name="TopLineAddress">00000000</ITEM>
     </PROPERTIES>
    </POPUP>
-   <POPUP w="16" x="158" flags="00000000" y="249" h="32" pid="14" iid="1">
+   <POPUP w="16" x="159" flags="00008001" y="533" h="32" pid="14" iid="1">
     <PROPERTIES>
      <ITEM name="DataType">2</ITEM>
      <ITEM name="DispChars">Yes</ITEM>
@@ -74,7 +74,7 @@
      <ITEM name="TopLineAddress">00000000</ITEM>
     </PROPERTIES>
    </POPUP>
-   <POPUP w="16" x="178" flags="0000000a" y="269" h="32" pid="4" iid="1">
+   <POPUP w="16" x="771" flags="0000000b" y="552" h="32" pid="4" iid="1">
     <PROPERTIES>
      <ITEM name="DataType">2</ITEM>
      <ITEM name="DispChars">Yes</ITEM>
@@ -94,7 +94,7 @@
      <ITEM name="TopLineAddress">00000020</ITEM>
     </PROPERTIES>
    </POPUP>
-   <POPUP w="600" x="218" flags="0000802b" y="309" h="400" pid="1" iid="1">
+   <POPUP w="600" x="591" flags="0000002b" y="118" h="400" pid="1" iid="1">
     <PROPERTIES>
      <ITEM name="Breakpoint 0">"__vector_2",18EE,001C,0E85,D1AB,1
 </ITEM>
@@ -109,7 +109,7 @@
      <ITEM name="nBreakpoints">0</ITEM>
     </PROPERTIES>
    </POPUP>
-   <POPUP w="300" x="910" flags="0000000b" y="312" h="300" pid="2" iid="1">
+   <POPUP w="300" x="1341" flags="0000000b" y="152" h="300" pid="2" iid="1">
     <PROPERTIES>
      <ITEM name="Address Column Width">94</ITEM>
      <ITEM name="AutoResize">No</ITEM>
