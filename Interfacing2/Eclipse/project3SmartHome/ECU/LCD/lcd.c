@@ -19,9 +19,9 @@
  *******************************************************************************/
 #include "lcd.h"
 #include "../../MCAL/GPIO/gpio.h"
-#include "../../MCAL/common_macros.h" /* For GET_BIT Macro */
 #include <util/delay.h> /* For the delay functions */
 #include <stdlib.h>  /* For itoa functions */
+#include "../../common_macros.h" /* For GET_BIT Macro */
 
 /*******************************************************************************
  *                      Functions Definitions                                  *

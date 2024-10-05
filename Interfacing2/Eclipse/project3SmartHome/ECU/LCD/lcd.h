@@ -17,7 +17,7 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#include "../../MCAL/std_types.h"
+#include "../../std_types.h"
 
 /*******************************************************************************
  *                                Definitions                                  *
@@ -57,6 +57,10 @@
 #define LCD_CURSOR_ON                        0x0E          // Cursor on command
 #define LCD_CURSOR_BLINK                     0x0D          // Cursor blink command
 #define LCD_SET_CURSOR_LOCATION              0x80          // Set cursor position command
+
+#define LCD_FIRST_ROW	0
+#define LCD_SECOND_ROW	1
+#define LCD_FIRST_COL	0
 
 /*******************************************************************************
  *                      Functions Prototypes                                   *

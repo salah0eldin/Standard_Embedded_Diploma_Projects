@@ -18,7 +18,7 @@
 /*******************************************************************************
  *                                Includes                                     *
  *******************************************************************************/
-#include "../std_types.h"
+#include "../../std_types.h"
 
 /*******************************************************************************
  *                                Definitions                                  *
@@ -111,9 +111,6 @@ typedef enum {
 typedef struct {
 	uint8 vreffSource : 2;           /* Voltage Reference Source (2 bits) */
 	uint8 prescaller  : 3;           /* ADC Prescaler (3 bits) */
-#ifdef ADC_ENABLE_INTERRUPT
-	void (*interruptHandler)(void);  /* Pointer to Interrupt Handler function */
-#endif
 } ADC_t;
 
 extern ADC_t g_adc1;
@@ -122,23 +119,52 @@ extern ADC_t g_adc1;
  *                              Function Prototypes                            *
  *******************************************************************************/
 
-/*
- * Description:
- * Initializes the ADC according to the configuration settings in the ADC_t structure.
+/**
+ * @brief Initializes the ADC according to the configuration settings in the ADC_t structure.
+ *
+ * This function sets up the ADC hardware module using the provided configuration structure,
+ * allowing it to be ready for use.
+ *
+ * @param adc_obj Pointer to a structure of type `ADC_t` that holds the configuration settings for the ADC.
  */
 void ADC_init(ADC_t * adc_obj);
 
-/*
- * Description:
- * Starts ADC conversion on a specific channel without blocking.
+#ifdef ADC_ENABLE_INTERRUPT
+
+/**
+ * @brief Sets the interrupt handler for ADC conversions.
+ *
+ * This function allows the user to define a custom interrupt handler function that
+ * will be called when an ADC conversion completes. This is only available if
+ * `ADC_ENABLE_INTERRUPT` is defined.
+ *
+ * @param interruptHandler Pointer to the function that will handle the ADC interrupt.
+ */
+void ADC_setInterruptHandler(void(*interruptHandler)(void));
+
+#endif /* ADC_ENABLE_INTERRUPT */
+
+/**
+ * @brief Starts ADC conversion on a specific channel without blocking.
+ *
+ * This function initiates an ADC conversion on the specified channel and immediately returns.
+ * It does not wait for the conversion to complete. The result can be retrieved later.
+ *
+ * @param channel The channel number on which to perform the ADC conversion.
+ * @return `boolean` indicating whether the operation was successful.
  */
 boolean ADC_readChannel(uint8 channel);
 
-/*
- * Description:
- * Starts ADC conversion on a specific channel and waits for conversion to complete.
- * Returns the converted value.
+/**
+ * @brief Starts ADC conversion on a specific channel and waits for the conversion to complete.
+ *
+ * This function starts an ADC conversion on the specified channel and waits until the conversion is done.
+ * The converted value is returned after the operation completes.
+ *
+ * @param channel The channel number on which to perform the ADC conversion.
+ * @return `uint16` The result of the ADC conversion.
  */
 uint16 ADC_readChannelBlocking(uint8 channel);
+
 
 #endif /* MCAL_ADC_ADC_H_ */

@@ -15,7 +15,7 @@
 #ifndef MCAL_GPIO_GPIO_REGISTERS_H_
 #define MCAL_GPIO_GPIO_REGISTERS_H_
 
-#include "../std_types.h"
+#include "../../std_types.h"
 
 // Auto-generated register typedefs and defines
 

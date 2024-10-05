@@ -11,8 +11,8 @@
  *
  *******************************************************************************/
 
-#ifndef MCAL_COMMON_MACROS_H_
-#define MCAL_COMMON_MACROS_H_
+#ifndef COMMON_MACROS_H_
+#define COMMON_MACROS_H_
 
 /*******************************************************************************
  *                                Macros                                       *
@@ -85,4 +85,4 @@
  */
 #define BIT_IS_CLEAR(REG, BIT)    (!(REG & (1 << BIT)))
 
-#endif /* MCAL_COMMON_MACROS_H_ */
+#endif /* COMMON_MACROS_H_ */

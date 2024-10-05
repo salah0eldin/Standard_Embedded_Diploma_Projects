@@ -17,23 +17,19 @@
  *******************************************************************************/
 #include "adc.h"
 #include "../GPIO/gpio.h"
-#include "../common_macros.h"
 #include <avr/interrupt.h>
+#include "../../common_macros.h"
 
 /*******************************************************************************
  *                              Global Variables                               *
  *******************************************************************************/
 uint16 g_adc_result = 0; // Global variable to store ADC result
 
-
-ADC_t g_adc1 = {
-    .vreffSource = ADC_SOURCE_INTERNAL_2560MV,
-    .prescaller = ADC_PRE_FOSC_DIV_128
-};
+ADC_t g_adc1 = { .vreffSource = ADC_SOURCE_INTERNAL_2560MV, .prescaller = ADC_PRE_FOSC_DIV_128 };
 
 #ifdef ADC_ENABLE_INTERRUPT
 static void (*ADC_interruptHandler)(void) = NULL_PTR; // Pointer to interrupt handler
-#endif
+#endif /* ADC_ENABLE_INTERRUPT */
 
 /*******************************************************************************
  *                              Functions Implementation                        *
@@ -44,24 +40,35 @@ static void (*ADC_interruptHandler)(void) = NULL_PTR; // Pointer to interrupt ha
  * Initializes the ADC according to the configuration settings in the ADC_t structure.
  */
 void ADC_init(ADC_t *adc_obj) {
-	/* Disable the ADC */
-	CLEAR_BIT(ADCSRA, ADEN);
+  /* Disable the ADC */
+  CLEAR_BIT(ADCSRA, ADEN);
 
-	/* Set Voltage Reference Source */
-	ADMUXbits.refs = adc_obj->vreffSource;
+  /* Set Voltage Reference Source */
+  ADMUXbits.refs = adc_obj->vreffSource;
 
-	/* Set ADC Prescaler */
-	ADCSRAbits.adps = adc_obj->prescaller;
+  /* Set ADC Prescaler */
+  ADCSRAbits.adps = adc_obj->prescaller;
 
-	/* Configure Interrupts */
-#ifdef ADC_ENABLE_INTERRUPT
-	SET_BIT(ADCSRA, ADIE); // Enable ADC interrupt
-	ADC_interruptHandler = adc_obj->interruptHandler; // Set interrupt handler
-#endif
-
-	/* Enable the ADC */
-	SET_BIT(ADCSRA, ADEN);
+  /* Enable the ADC */
+  SET_BIT(ADCSRA, ADEN);
 }
+
+#ifdef ADC_ENABLE_INTERRUPT
+
+/**
+ * @brief Sets the interrupt handler for ADC conversions.
+ *
+ * This function allows the user to define a custom interrupt handler function that
+ * will be called when an ADC conversion completes. This is only available if
+ * `ADC_ENABLE_INTERRUPT` is defined.
+ *
+ * @param interruptHandler Pointer to the function that will handle the ADC interrupt.
+ */
+void ADC_setInterruptHandler(void(*interruptHandler)(void)){
+  ADC_interruptHandler = interruptHandler;
+}
+
+#endif /* ADC_ENABLE_INTERRUPT */
 
 /*
  * Description:
@@ -69,18 +76,19 @@ void ADC_init(ADC_t *adc_obj) {
  */
 boolean ADC_readChannel(uint8 channel) {
 
-	uint8 ret = 1;
+  uint8 ret = 1;
 
-	if (ADC_isDone()) {
-		/* Set the ADC channel */
-		ADMUXbits.mux = channel;
+  if (ADC_isDone()) {
+    /* Set the ADC channel */
+    ADMUXbits.mux = channel;
 
-		/* Start ADC Conversion */
-		SET_BIT(ADCSRA, ADSC);
-	} else {
-		ret = 0;
-	}
-	return ret;
+    /* Start ADC Conversion */
+    SET_BIT(ADCSRA, ADSC);
+  }
+  else {
+    ret = 0;
+  }
+  return ret;
 }
 
 /*
@@ -89,20 +97,21 @@ boolean ADC_readChannel(uint8 channel) {
  * Returns the converted value.
  */
 uint16 ADC_readChannelBlocking(uint8 channel) {
-	/* Start conversion */
-	ADC_readChannel(channel);
+  /* Start conversion */
+  while (ADC_readChannel(channel) == 0)
+    ;
 
-	/* Wait while conversion is in progress */
-	while (!GET_BIT(ADCSRA, ADIF))
-		;
+  /* Wait while conversion is in progress */
+  while (!GET_BIT(ADCSRA, ADIF))
+    ;
 
 #ifndef ADC_ENABLE_INTERRUPT
-	/* Clear flag after conversion */
-	SET_BIT(ADCSRA, ADIF);
+  /* Clear flag after conversion */
+  SET_BIT(ADCSRA, ADIF);
 #endif
 
-	/* Return the ADC result */
-	return ADC;
+  /* Return the ADC result */
+  return ADC;
 }
 
 /*******************************************************************************
@@ -113,4 +122,4 @@ ISR(ADC_vect) {
 	if(NULL_PTR != ADC_interruptHandler)
 		(*ADC_interruptHandler)(); // Call the registered interrupt handler
 }
-#endif
+#endif /* ADC_ENABLE_INTERRUPT */
