@@ -50,7 +50,7 @@ The `stdDrivers` folder contains standard drivers used across various projects. 
 To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
-- AVR Studio
+- Eclipse or any prefered editor
 - Proteus
 
 Feel free to explore the projects and use the drivers in your own embedded systems projects. If you have any questions or need further assistance, don't hesitate to reach out.
