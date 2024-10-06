@@ -62,13 +62,11 @@ void DISPLAY_showAlarm(void) {
 void DISPLAY_showNormal(void) {
   /* Display motor status based on temperature */
   LCD_moveCursor(LCD_FIRST_ROW, LCD_FIRST_COL);
-  LCD_displayString("    FAN is O");
-
   /* Check temperature level and display appropriate status */
   if (g_temprature < TEMP_LEVEL1) {
-    LCD_displayString("FF    "); /* FAN is OFF */
+    LCD_displayString("    FAN is OFF    ");
   } else {
-    LCD_displayString("N     "); /* FAN is ON */
+    LCD_displayString("    FAN is ON     ");
   }
 
   /* Display the temperature and light intensity on the second row */
