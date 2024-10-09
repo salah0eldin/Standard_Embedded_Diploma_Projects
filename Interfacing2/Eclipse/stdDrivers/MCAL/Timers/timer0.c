@@ -26,8 +26,8 @@
  *******************************************************************************/
 
 /** @brief Global instance of TIMER0_t to hold Timer0 configurations. */
-TIMER0_t g_timer0 = { .mode = TIMER0_MODE_FAST_PWM, .clockPre = TIMER0_CLOCK_DIV_1024,
-    .compareOutputMode = TIMER0_COMPARE_FAST_PWM_NIN_INVERTING, .uni.dutyCycle = 0 };
+TIMER0_t g_timer0 = { .mode = TIMER0_MODE_PWM_FAST, .clockPre = TIMER0_CLOCK_DIV_1024,
+    .compareOutputMode = TIMER0_COMPARE_FAST_PWM_NIN_INVERTING };
 
 #ifdef TIMER0_ENABLE_OV_INTERRUPT
 /** @brief Pointer to the overflow interrupt handler function. */
@@ -55,50 +55,46 @@ static void (*TIMER0_compareInterruptHandler) (void) = NULL_PTR;
 void TIMER0_init(TIMER0_t *timer0) {
   TCCR0bits.cs0 = TIMER0_CLOCK_0; /* Set clock source to stop the timer */
 
+  /* Set Mode */
   TCCR0bits.wgm00 = timer0->mode & 0x01; /* Set WGM00 based on mode */
   TCCR0bits.wgm01 = timer0->mode >> 1; /* Set WGM01 based on mode */
+
+  /* Set Compare Mode */
   TCCR0bits.com0 = timer0->compareOutputMode; /* Set compare output mode */
 
+  /* Enable needed interrupts */
 #ifdef TIMER0_ENABLE_OV_INTERRUPT
   SET_BIT(TIMSK, TOIE0);  /* Enable Timer0 overflow interrupt */
-  TIMER0_overFlowInterruptHandler = timer0->overFlowInterruptHandler; /* Set overflow handler */
 #endif
 
 #ifdef TIMER0_ENABLE_CTC_INTERRUPT
   SET_BIT(TIMSK, OCIE0);  /* Enable Timer0 CTC interrupt */
-  TIMER0_compareInterruptHandler = timer0->compareInterruptHandler; /* Set compare handler */
 #endif
 
-  /* Configure the output pin for PWM if not in normal mode */
+  /* Configure the output pin if not in normal mode */
   if (timer0->compareOutputMode != TIMER0_COMPARE_NORMAL) {
     GPIO_setupPinDirection(PORTB_ID, PIN3_ID, PIN_OUTPUT);
   }
 
-  /* Set timer operation mode and initialize values */
+  /* Set timer operation mode  */
   switch (timer0->mode)
     {
     case TIMER0_MODE_NORMAL:
-      TCCR0bits.foc0 = 1; /* Set FOC0 for normal mode */
-      TIMER0_setTimerValue(timer0->uni.timerValue); /* Set initial timer value */
+    case TIMER0_MODE_CTC:
+      TCCR0bits.foc0 = 1; /* Set FOC0 for normal mode OR CTC mode */
       break;
     case TIMER0_MODE_PWM_PC:
-      TCCR0bits.foc0 = 0; /* Clear FOC0 for PWM mode */
-      break;
-    case TIMER0_MODE_CTC:
-      TCCR0bits.foc0 = 1; /* Set FOC0 for CTC mode */
-      TIMER0_setCompareValue(timer0->uni.compareValue); /* Set compare value */
-      break;
-    case TIMER0_MODE_FAST_PWM:
-      TCCR0bits.foc0 = 0; /* Clear FOC0 for fast PWM mode */
-      TIMER0_setDutyCycle(timer0->uni.dutyCycle); /* Set duty cycle */
+    case TIMER0_MODE_PWM_FAST:
+      TCCR0bits.foc0 = 0; /* Clear FOC0 for PWM mode OR fast PWM mode */
       break;
     }
 
-  TCCR0bits.cs0 = timer0->clockPre; /* Set clock prescaler */
+  /* Set clock pre-scaler */
+  TCCR0bits.cs0 = timer0->clockPre;
 }
 
 /**
- * @brief Deinitializes Timer0 and stops its operation.
+ * @brief De-initializes Timer0 and stops its operation.
  *
  * This function resets Timer0 and disables its operation, clearing
  * all associated interrupts.
@@ -133,6 +129,9 @@ void TIMER0_setCTCInterruptHandler(void (*compareInterruptHandler)(void)){
 }
 #endif
 
+/*******************************************************************************
+ *                                 ISR Functions                               *
+ *******************************************************************************/
 #ifdef TIMER0_ENABLE_OV_INTERRUPT
 /** @brief ISR for Timer0 overflow interrupt. */
 ISR(TIMER0_OVF_vect)
@@ -150,3 +149,4 @@ ISR(TIMER0_COMP_vect)
     TIMER0_compareInterruptHandler(); /* Call the compare handler if set */
 }
 #endif
+

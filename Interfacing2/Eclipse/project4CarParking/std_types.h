@@ -10,8 +10,8 @@
  * Author: Salah-Eldin
  *******************************************************************************/
 
-#ifndef MCAL_STD_TYPES_H_
-#define MCAL_STD_TYPES_H_
+#ifndef STD_TYPES_H_
+#define STD_TYPES_H_
 
 /*******************************************************************************
  *                                Includes                                     *
@@ -74,4 +74,4 @@ typedef signed long long      sint64;   /**< Signed 64-bit integer (-92233720368
 typedef float                 float32;  /**< 32-bit floating point number */
 typedef double                float64;  /**< 64-bit floating point number */
 
-#endif /* MCAL_STD_TYPES_H_ */
+#endif /* STD_TYPES_H_ */

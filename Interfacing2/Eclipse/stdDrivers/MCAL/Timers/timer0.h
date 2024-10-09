@@ -21,10 +21,14 @@
  *                                Includes                                     *
  *******************************************************************************/
 #include "../../std_types.h"
+#include <avr/io.h>
 
 /*******************************************************************************
  *                                 Macros                                      *
  *******************************************************************************/
+
+/*#define TIMER0_ENABLE_OV_INTERRUPT*/
+/*#define TIMER0_ENABLE_CTC_INTERRUPT*/
 
 /** @brief Set the Timer0 register value.
  *
@@ -53,7 +57,7 @@ typedef enum {
   TIMER0_MODE_NORMAL,        /* Normal counting mode */
   TIMER0_MODE_PWM_PC,       /* PWM with phase correct mode */
   TIMER0_MODE_CTC,          /* Compare mode */
-  TIMER0_MODE_FAST_PWM       /* Fast PWM mode */
+  TIMER0_MODE_PWM_FAST       /* Fast PWM mode */
 } TIMER0_mode_t;
 
 /** @brief Enumeration for Timer0 compare output modes. */
@@ -83,7 +87,7 @@ typedef enum {
   TIMER0_CLOCK_DIV_256,            /* clk /256 (From pre-scaler) */
   TIMER0_CLOCK_DIV_1024,           /* clk /1024 (From pre-scaler) */
   TIMER0_CLOCK_EXTERNAL_FALLING,   /* External clock source on T0 pin. Clock on falling edge. */
-  TIMER0_CLOCK_EXTERNAL_RISING      /* External clock source on T0 pin. Clock on rising edge. */
+  TIMER0_CLOCK_EXTERNAL_RISING     /* External clock source on T0 pin. Clock on rising edge. */
 } TIMER0_clockPrescaler_t;
 
 /*******************************************************************************
@@ -95,11 +99,6 @@ typedef struct {
   uint8 mode : 2;                  /* Timer mode selection */
   uint8 compareOutputMode : 2;     /* Compare output mode selection */
   uint8 clockPre : 3;              /* Clock prescaler selection */
-  union {
-    uint8 timerValue;              /* Timer value for normal mode */
-    uint8 compareValue;            /* Compare value for CTC mode */
-    uint8 dutyCycle;               /* Duty cycle for PWM */
-  } uni;                            /* Union for various Timer0 value types */
 } TIMER0_t;
 
 /*******************************************************************************

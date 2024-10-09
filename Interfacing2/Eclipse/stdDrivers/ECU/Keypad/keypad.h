@@ -17,7 +17,7 @@
 #ifndef ECU_KEYPAD_KEYPAD_H_
 #define ECU_KEYPAD_KEYPAD_H_
 
-#include "../../MCAL/std_types.h"
+#include "../../std_types.h"
 
 /*******************************************************************************
  *                                Definitions                                  *
