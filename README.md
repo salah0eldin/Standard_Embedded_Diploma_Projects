@@ -6,6 +6,7 @@ Welcome to the Standard Embedded Diploma Projects repository! This repository co
 .
 |-- MCAL
 |   |-- ADC
+
 |   |   |-- adc.c
 |   |   *-- adc.h
 |   |-- GPIO
