@@ -18,17 +18,10 @@ int main(void) {
 
   USART_init(&g_usart);
 
-  __asm__("SEI");
+/*  __asm__("SEI");*/
 
-
-    uint8 dataR = 0;
-    uint8 strData[5] = {0};
   for (;;) {
-
-    USART_recieveStringBlocking(strData, 4);
-    _delay_ms(500);
-    USART_sendCharBlocking('\r');
-    USART_sendStringBlocking(strData);
+    USART_sendStringBlocking("Hello USART !!\r");
     _delay_ms(500);
   }
 }
