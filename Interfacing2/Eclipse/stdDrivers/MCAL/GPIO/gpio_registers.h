@@ -289,6 +289,11 @@ typedef union
     uint8 wgm20 :1;
     uint8 foc2 :1;
   };
+  struct {
+    uint8 cs2 : 3;
+    uint8 :1;
+    uint8 com2: 2;
+  };
 } TCCR2bits_t;
 #define TCCR2bits (*((volatile TCCR2bits_t*)(0x45)))
 

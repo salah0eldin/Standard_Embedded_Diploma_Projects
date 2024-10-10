@@ -48,6 +48,10 @@
  */
 #define TIMER0_setDutyCycle(val) (OCR0 = (uint8)((uint16)val * 255 / 100))
 
+/** @brief Clear Pre-scaler of both timer1 and timer0 as they share same pre-scaler
+ */
+#define TIMER0_AND_TIMER1_RESET_PRESCALER()  (SFIOR = (SFIOR | (1 << PSR10)));
+
 /*******************************************************************************
  *                                 Enums                                       *
  *******************************************************************************/
@@ -55,27 +59,27 @@
 /** @brief Enumeration for Timer0 modes. */
 typedef enum {
   TIMER0_MODE_NORMAL,        /* Normal counting mode */
-  TIMER0_MODE_PWM_PC,       /* PWM with phase correct mode */
-  TIMER0_MODE_CTC,          /* Compare mode */
+  TIMER0_MODE_PWM_PC,        /* PWM with phase correct mode */
+  TIMER0_MODE_CTC,           /* Compare mode */
   TIMER0_MODE_PWM_FAST       /* Fast PWM mode */
 } TIMER0_mode_t;
 
 /** @brief Enumeration for Timer0 compare output modes. */
 typedef enum {
-  TIMER0_COMPARE_NORMAL,                     /* Normal port operation, OC0 disconnected. */
-  TIMER0_COMPARE_NON_PWM_TOGGLE_OC0,        /* Toggle OC0 on compare match */
-  TIMER0_COMPARE_NON_PWM_CLEAR_OC0,         /* Clear OC0 on compare match */
-  TIMER0_COMPARE_NON_PWM_SET_OC0,           /* Set OC0 on compare match */
+  TIMER0_COMPARE_NORMAL,                    /* Normal port operation, OC0 disconnected. */
+  TIMER0_COMPARE_PWM_NON_TOGGLE_OC0,        /* Toggle OC0 on compare match */
+  TIMER0_COMPARE_PWM_NON_CLEAR_OC0,         /* Clear OC0 on compare match */
+  TIMER0_COMPARE_PWM_NON_SET_OC0,           /* Set OC0 on compare match */
 
-  TIMER0_COMPARE_FAST_PWM_NIN_INVERTING = 2, /* Clear OC0 on compare match, set OC0 at BOTTOM */
-  TIMER0_COMPARE_FAST_PWM_INVERTING,          /* Set OC0 on compare match, clear OC0 at BOTTOM */
+  TIMER0_COMPARE_PWM_FAST_NIN_INVERTING = 2,  /* Clear OC0 on compare match, set OC0 at BOTTOM */
+  TIMER0_COMPARE_PWM_FAST_INVERTING,          /* Set OC0 on compare match, clear OC0 at BOTTOM */
 
   /* Clear OC0 on compare match when up-counting.
    * Set OC0 on compare match when down-counting. */
-  TIMER0_COMPARE_PC_PWM_CLEAR_UP = 2,
+  TIMER0_COMPARE_PWM_PC_CLEAR_UP = 2,
   /* Set OC0 on compare match when up-counting.
    * Clear OC0 on compare match when down-counting. */
-  TIMER0_COMPARE_PC_PWM_CLEAR_DOWN
+  TIMER0_COMPARE_PWM_PC_CLEAR_DOWN
 } TIMER0_compareOutput_mode_t;
 
 /** @brief Enumeration for Timer0 clock prescaler options. */
@@ -91,14 +95,14 @@ typedef enum {
 } TIMER0_clockPrescaler_t;
 
 /*******************************************************************************
- *                             Struct Definitions                               *
+ *                             Struct Definitions                              *
  *******************************************************************************/
 
 /** @brief Structure to hold Timer0 configuration. */
 typedef struct {
   uint8 mode : 2;                  /* Timer mode selection */
   uint8 compareOutputMode : 2;     /* Compare output mode selection */
-  uint8 clockPre : 3;              /* Clock prescaler selection */
+  uint8 clockPre : 3;              /* Clock pre-scaler selection */
 } TIMER0_t;
 
 /*******************************************************************************

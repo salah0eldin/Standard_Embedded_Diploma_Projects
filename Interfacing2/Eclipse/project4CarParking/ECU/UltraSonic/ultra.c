@@ -71,12 +71,12 @@ void ULTRA_init(void) {
  */
 void ULTRA_edgeHandler(void) {
   if (g_interruptCount == 0) {
-    TIMER1_setTimerValue(0); /* Reset timer value */
+    g_ultra_ticks = ICR1; /* Get the captured timer value */
     TIMER1_IC_EdgeSelect(TIMER1_INPUT_CAPTURE_FALLING); /* Set edge for input capture to falling */
     g_interruptCount = 1; /* Increment interrupt count */
   }
   else {
-    g_ultra_ticks = ICR1; /* Get the captured timer value */
+    g_ultra_ticks = ICR1 - g_ultra_ticks; /* Get the captured timer value */
     TIMER1_DISABLE(); /* Disable Timer1 */
     g_interruptCount = 0; /* Reset interrupt count */
     g_ultra_distance_ready = TRUE; /* Indicate that distance measurement is ready */
@@ -92,8 +92,9 @@ void ULTRA_edgeHandler(void) {
  * @return TRUE if the measurement started successfully, FALSE otherwise.
  */
 boolean ULTRA_start(void) {
-  if (g_ultra_distance_ready == FALSE) {
+  if (g_ultra_distance_ready == 0) {
     TIMER1_ENABLE(); /* Enable Timer1 */
+    TIMER1_setTimerValue(0); /* Reset timer value */
     TIMER1_IC_EdgeSelect(TIMER1_INPUT_CAPTURE_RAISING); /* Set edge for input capture to rising */
     GPIO_writePin(ULTRA_TRIG_PORT, ULTRA_TRIG_PIN, LOGIC_HIGH); /* Send trigger pulse */
     _delay_us(10); /* Wait for 10 microseconds */

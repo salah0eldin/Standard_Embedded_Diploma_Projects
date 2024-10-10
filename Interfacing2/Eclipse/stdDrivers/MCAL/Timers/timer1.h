@@ -78,6 +78,10 @@
  */
 #define TIMER1_DISABLE()  (TCCR1Bbits.cs1 = 0)
 
+/** @brief Clear Pre-scaler of both timer1 and timer0 as they share same pre-scaler
+ */
+#define TIMER1_AND_TIMER0_RESET_PRESCALER()  (SFIOR = (SFIOR | (1 << PSR10)));
+
 /*******************************************************************************
  *                                 Enums                                       *
  *******************************************************************************/
@@ -112,25 +116,25 @@ typedef enum {
 typedef enum {
   TIMER1_COMPARE_NORMAL, /* Normal port operation, OC1A/OC1B disconnected. */
 
-  TIMER1_COMPARE_NON_PWM_TOGGLE_OC1, /* Toggle OC1A/OC1B on compare match.                         */
-  TIMER1_COMPARE_NON_PWM_CLEAR_OC1, /* Clear OC1A/OC1B on compare match (Set output to low level) */
-  TIMER1_COMPARE_NON_PWM_SET_OC1, /* Set OC1A/OC1B on compare match (Set output to high level)  */
+  TIMER1_COMPARE_PWM_NON_TOGGLE_OC1, /* Toggle OC1A/OC1B on compare match.                         */
+  TIMER1_COMPARE_PWM_NON_CLEAR_OC1, /* Clear OC1A/OC1B on compare match (Set output to low level) */
+  TIMER1_COMPARE_PWM_NON_SET_OC1, /* Set OC1A/OC1B on compare match (Set output to high level)  */
 
   /* WGM13:0 = 15: Toggle OC1A on Compare Match, OC1B disconnected (normal port operation).
    * For all other WGM13:0 settings, normal port operation, OC1A/OC1B disconnected. */
-  TIMER1_COMPARE_FAST_PWM_SPECIAL = 1,
-  TIMER1_COMPARE_FAST_PWM_NIN_INVERTING, /* Clear OC1A/OC1B on compare match, set OC1A/OC1B at BOTTOM, (non-inverting mode) */
-  TIMER1_COMPARE_FAST_PWM_INVERTING, /* Set OC1A/OC1B on compare match, clear OC1A/OC1B at BOTTOM, (inverting mode)     */
+  TIMER1_COMPARE_PWM_FAST_SPECIAL = 1,
+  TIMER1_COMPARE_PWM_FAST_NIN_INVERTING, /* Clear OC1A/OC1B on compare match, set OC1A/OC1B at BOTTOM, (non-inverting mode) */
+  TIMER1_COMPARE_PWM_FAST_INVERTING, /* Set OC1A/OC1B on compare match, clear OC1A/OC1B at BOTTOM, (inverting mode)     */
 
   /* WGM13:0 = 9 or 14: Toggle OC1A on Compare Match, OC1B disconnected (normal port operation).
    * For all other WGM13:0 settings, normal port operation, OC1A/OC1B disconnected. */
-  TIMER1_COMPARE_PC_PWM_SPECIAL = 1,
+  TIMER1_COMPARE_PWM_PC_SPECIAL = 1,
   /* Clear OC1A/OC1B on compare match when up-counting.
    * Set OC1A/OC1B on compare match when down-counting */
-  TIMER1_COMPARE_PC_PWM_CLEAR_UP,
+  TIMER1_COMPARE_PWM_PC_CLEAR_UP,
   /* Set OC1A/OC1B on compare match when up-counting.
    * Clear OC1A/OC1B on compare match when down-counting.*/
-  TIMER1_COMPARE_PC_PWM_CLEAR_DOWN
+  TIMER1_COMPARE_PWM_PC_CLEAR_DOWN
 } TIMER1_compareOutput_mode_t;
 
 /** @brief Enumeration for timer1 clock pre-scaler options. */

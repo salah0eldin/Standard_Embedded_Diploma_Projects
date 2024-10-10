@@ -10,21 +10,26 @@
  *
  *******************************************************************************/
 
-#include "ECU/UltraSonic/ultra.h"
-#include "ECU/Buzzer/buzzer.h"
-#include "ECU/LCD/lcd.h"
-#include "ECU/LED/led.h"
-
-#include "MCAL/Timers/timer1.h"
-#include "MCAL/GPIO/gpio.h"
-
 #include <util/delay.h>
+
+#include "MCAL/USART/usart.h"
 
 int main(void) {
 
+  USART_init(&g_usart);
 
+  __asm__("SEI");
+
+
+    uint8 dataR = 0;
+    uint8 strData[5] = {0};
   for (;;) {
 
+    USART_recieveStringBlocking(strData, 4);
+    _delay_ms(500);
+    USART_sendCharBlocking('\r');
+    USART_sendStringBlocking(strData);
+    _delay_ms(500);
   }
 }
 

@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Module: Ultra-Sonic Sensor
+ * Module: Ultra-Sonic Sensor using ICU
  *
  * File Name: ultra.h
  *
@@ -17,8 +17,8 @@
  *
  *******************************************************************************/
 
-#ifndef ECU_ULTRASONIC_ULTRA_H_
-#define ECU_ULTRASONIC_ULTRA_H_
+#ifndef ECU_ULTRASONICICU_ULTRA_ICU_H_
+#define ECU_ULTRASONICICU_ULTRA_ICU_H_
 
 /*******************************************************************************
  *                                Includes                                     *
@@ -89,4 +89,4 @@ boolean ULTRA_start(void);
  */
 uint16 ULTRA_readDistance(void);
 
-#endif /* ECU_ULTRASONIC_ULTRA_H_ */
+#endif /* ECU_ULTRASONICICU_ULTRA_ICU_H_ */

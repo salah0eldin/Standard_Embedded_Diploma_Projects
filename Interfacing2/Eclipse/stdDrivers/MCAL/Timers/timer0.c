@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Module: timer0
+ * Module: Timer0
  *
  * File Name: timer0.c
  *
@@ -27,7 +27,7 @@
 
 /** @brief Global instance of TIMER0_t to hold Timer0 configurations. */
 TIMER0_t g_timer0 = { .mode = TIMER0_MODE_PWM_FAST, .clockPre = TIMER0_CLOCK_DIV_1024,
-    .compareOutputMode = TIMER0_COMPARE_FAST_PWM_NIN_INVERTING };
+    .compareOutputMode = TIMER0_COMPARE_PWM_FAST_NIN_INVERTING };
 
 #ifdef TIMER0_ENABLE_OV_INTERRUPT
 /** @brief Pointer to the overflow interrupt handler function. */

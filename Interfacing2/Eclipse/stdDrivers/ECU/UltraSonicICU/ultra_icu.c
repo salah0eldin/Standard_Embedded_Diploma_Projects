@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Module: Ultra-Sonic Sensor
+ * Module: Ultra-Sonic Sensor using ICU
  *
  * File Name: ultra.c
  *
@@ -20,7 +20,8 @@
 /*******************************************************************************
  *                                Includes                                     *
  *******************************************************************************/
-#include "ultra.h"
+#include "ultra_icu.h"
+
 #include "../../MCAL/GPIO/gpio.h"
 #include "../../MCAL/Timers/timer1.h"
 
@@ -31,7 +32,7 @@
  *******************************************************************************/
 
 uint16 g_ultra_distanceCm = 0; /**< Global variable to store the measured distance in centimeters */
-uint8 g_ultra_distance_ready = TRUE; /**< Flag to indicate if the distance measurement is ready */
+uint8 g_ultra_distance_ready = FALSE; /**< Flag to indicate if the distance measurement is ready */
 
 static uint16 g_ultra_ticks = 0; /**< Ticks measured by Timer1 for distance calculation */
 static uint8 g_interruptCount = 0; /**< Counter to track the number of interrupts */
@@ -71,12 +72,12 @@ void ULTRA_init(void) {
  */
 void ULTRA_edgeHandler(void) {
   if (g_interruptCount == 0) {
-    TIMER1_setTimerValue(0); /* Reset timer value */
+    g_ultra_ticks = ICR1; /* Get the captured timer value */
     TIMER1_IC_EdgeSelect(TIMER1_INPUT_CAPTURE_FALLING); /* Set edge for input capture to falling */
     g_interruptCount = 1; /* Increment interrupt count */
   }
   else {
-    g_ultra_ticks = ICR1; /* Get the captured timer value */
+    g_ultra_ticks = ICR1 - g_ultra_ticks; /* Get the captured timer value */
     TIMER1_DISABLE(); /* Disable Timer1 */
     g_interruptCount = 0; /* Reset interrupt count */
     g_ultra_distance_ready = TRUE; /* Indicate that distance measurement is ready */
@@ -94,6 +95,7 @@ void ULTRA_edgeHandler(void) {
 boolean ULTRA_start(void) {
   if (g_ultra_distance_ready == 0) {
     TIMER1_ENABLE(); /* Enable Timer1 */
+    TIMER1_setTimerValue(0); /* Reset timer value */
     TIMER1_IC_EdgeSelect(TIMER1_INPUT_CAPTURE_RAISING); /* Set edge for input capture to rising */
     GPIO_writePin(ULTRA_TRIG_PORT, ULTRA_TRIG_PIN, LOGIC_HIGH); /* Send trigger pulse */
     _delay_us(10); /* Wait for 10 microseconds */
