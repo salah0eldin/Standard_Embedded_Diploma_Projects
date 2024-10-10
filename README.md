@@ -2,6 +2,62 @@
 
 Welcome to the Standard Embedded Diploma Projects repository! This repository contains all the projects I worked on during the Standard Embedded Diploma program under the guidance of Eng. Mohammed Tarek.
 
+## Tree
+.
+|-- MCAL
+|   |-- ADC
+|   |   |-- adc.c
+|   |   `-- adc.h
+|   |-- GPIO
+|   |   |-- gpio.c
+|   |   |-- gpio.h
+|   |   `-- gpio_registers.h
+|   |-- Timers
+|   |   |-- timer0.c
+|   |   |-- timer0.h
+|   |   |-- timer1.c
+|   |   |-- timer1.h
+|   |   |-- timer2.c
+|   |   `-- timer2.h
+|   `-- USART
+|       |-- usart.c
+|       `-- usart.h
+|-- ECU
+|   |-- Buzzer
+|   |   |-- buzzer.c
+|   |   `-- buzzer.h
+|   |-- DCMotor
+|   |   |-- dcmotor.c
+|   |   `-- dcmotor.h
+|   |-- FlameSensor
+|   |   |-- flame.c
+|   |   `-- flame.h
+|   |-- Keypad
+|   |   |-- keypad.c
+|   |   `-- keypad.h
+|   |-- LCD
+|   |   |-- lcd.c
+|   |   `-- lcd.h
+|   |-- LDR
+|   |   |-- ldr.c
+|   |   `-- ldr.h
+|   |-- LED
+|   |   |-- led.c
+|   |   `-- led.h
+|   |-- LM35
+|   |   |-- lm35.c
+|   |   `-- lm35.h
+|   |-- SevenSegment
+|   |   |-- sevenseg.c
+|   |   |-- sevenseg.h
+|   |   `-- sevenseg_cfg.h
+|   `-- UltraSonicICU
+|       |-- ultra_icu.c
+|       `-- ultra_icu.h
+|-- common_macros.h
+|-- main.c
+`-- std_types.h
+
 ## Table of Contents
 - Projects
 - stdDrivers
