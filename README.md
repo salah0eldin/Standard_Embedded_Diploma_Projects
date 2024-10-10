@@ -7,37 +7,37 @@ Welcome to the Standard Embedded Diploma Projects repository! This repository co
 |-- MCAL
 |   |-- ADC
 |   |   |-- adc.c
-|   |   `-- adc.h
+|   |   *-- adc.h
 |   |-- GPIO
 |   |   |-- gpio.c
 |   |   |-- gpio.h
-|   |   `-- gpio_registers.h
+|   |   *-- gpio_registers.h
 |   |-- Timers
 |   |   |-- timer0.c
 |   |   |-- timer0.h
 |   |   |-- timer1.c
 |   |   |-- timer1.h
 |   |   |-- timer2.c
-|   |   `-- timer2.h
-|   `-- USART
+|   |   *-- timer2.h
+|   *-- USART
 |       |-- usart.c
-|       `-- usart.h
+|       *-- usart.h
 |-- ECU
 |   |-- Buzzer
 |   |   |-- buzzer.c
-|   |   `-- buzzer.h
+|   |   *-- buzzer.h
 |   |-- DCMotor
 |   |   |-- dcmotor.c
-|   |   `-- dcmotor.h
+|   |   *-- dcmotor.h
 |   |-- FlameSensor
 |   |   |-- flame.c
-|   |   `-- flame.h
+|   |   *-- flame.h
 |   |-- Keypad
 |   |   |-- keypad.c
-|   |   `-- keypad.h
+|   |   *-- keypad.h
 |   |-- LCD
 |   |   |-- lcd.c
-|   |   `-- lcd.h
+|   |   \`-- lcd.h
 |   |-- LDR
 |   |   |-- ldr.c
 |   |   `-- ldr.h
