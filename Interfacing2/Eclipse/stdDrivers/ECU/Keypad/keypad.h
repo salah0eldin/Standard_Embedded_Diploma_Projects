@@ -23,7 +23,7 @@
  *                                Definitions                                  *
  *******************************************************************************/
 
-#define SPECIAL_KEYPAD
+//#define SPECIAL_KEYPAD
 //#define STANDARD_KEYPAD
 
 /* Keypad configurations for number of rows and columns */

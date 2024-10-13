@@ -28,12 +28,12 @@ USART_t g_usart = {
     .baudRate = 9600,                       /** Baud rate for USART communication */
     .mode = USART_MODE_ASYNC,               /** Mode of operation (asynchronous)  */
     .charSize = USART_CHAR_SIZE_8BIT,       /** Character size (8 bits)           */
-    .asyncSpeed = USART_ASYNC_SPEED_NORMAL, /** Asynchronous speed (normal)       */
+    .asyncSpeed = USART_ASYNC_SPEED_DOUBLE_NORMAL, /** Asynchronous speed (normal)       */
     .parityMode = USART_PARITY_DISABLED,    /** Parity mode (disabled)            */
     .stopBits = USART_STOP_1BIT,            /** Number of stop bits (1 bit)       */
     .txEnable = USART_TX_ENABLE,            /** Transmitter enable flag (enabled) */
     .rxEnable = USART_RX_ENABLE,            /** Receiver enable flag (enabled)    */
-    .clockPolarity = USART_CHANGE_FALLING_SAMPLE_RISING /** Clock polarity (falling edge sampling) */
+    .clockPolarity = USART_CHANGE_RISING_SAMPLE_FALLING /** Clock polarity (falling edge sampling) */
 };
 
 
@@ -82,6 +82,7 @@ void USART_init(USART_t *usart) {
 	  ubrrTemp /= 8; /* Divide by 8 for normal speed */
 	  break;
 	case USART_ASYNC_SPEED_DOUBLE_NORMAL:
+	  SET_BIT(UCSRA, U2X);
 	  ubrrTemp /= 4; /* Divide by 4 for double speed */
 	  break;
 	}
@@ -188,6 +189,7 @@ boolean USART_sendCharNonBlocking(uint8 data) {
  */
 boolean USART_receiveCharNonBlocking(uint8 *ptrData) {
   if (USART_RECEIVE_COMPLETE()) {
+    volatile uint8 dumpStatus = UCSRA; /* Read status */
     *ptrData = UDR; /* Read received data */
     return TRUE;
   }
@@ -219,8 +221,8 @@ void USART_sendCharBlocking(uint8 data) {
 void USART_sendStringBlocking(uint8 *strData) {
   while (*strData != '\0') {
     USART_sendCharBlocking(*strData); /* Send each character */
-    if (*strData == '\r')
-      break; /* Stop sending if carriage return is found */
+    if (*strData == '#')
+      break;  /*Stop sending if carriage return is found*/
     else
       strData++; /* Move to the next character */
   }
@@ -252,7 +254,7 @@ void USART_recieveStringBlocking(uint8 *ptrStrData, uint8 length) {
   do {
     USART_receiveCharBlocking(&ptrStrData[len++]); /* Receive each character */
   }
-  while (length > len && ptrStrData[len - 1] != '\0' && ptrStrData[len - 1] != '\r');
+  while (length > len && ptrStrData[len - 1] != '\0' && ptrStrData[len - 1] != '#');
 }
 
 #ifdef USART_RX_COMPLETE_INTERRUPT_ENABLE

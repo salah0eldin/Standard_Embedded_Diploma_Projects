@@ -19,10 +19,8 @@
 
 // Auto-generated register typedefs and defines
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 c :1;
     uint8 z :1;
     uint8 n :1;
@@ -35,10 +33,8 @@ typedef union
 } SREGbits_t;
 #define SREGbits (*((volatile SREGbits_t*)(0x5F)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 sp8 :1;
     uint8 sp9 :1;
     uint8 sp10 :1;
@@ -51,10 +47,8 @@ typedef union
 } SPHbits_t;
 #define SPHbits (*((volatile SPHbits_t*)(0x5E)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 sp0 :1;
     uint8 sp1 :1;
     uint8 sp2 :1;
@@ -67,10 +61,8 @@ typedef union
 } SPLbits_t;
 #define SPLbits (*((volatile SPLbits_t*)(0x5D)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 ivce :1;
     uint8 ivsel :1;
     uint8 :1;
@@ -83,10 +75,8 @@ typedef union
 } GICRbits_t;
 #define GICRbits (*((volatile GICRbits_t*)(0x5B)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 :1;
     uint8 :1;
     uint8 :1;
@@ -99,10 +89,8 @@ typedef union
 } GIFRbits_t;
 #define GIFRbits (*((volatile GIFRbits_t*)(0x5A)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 toie0 :1;
     uint8 ocie0 :1;
     uint8 toie1 :1;
@@ -115,10 +103,8 @@ typedef union
 } TIMSKbits_t;
 #define TIMSKbits (*((volatile TIMSKbits_t*)(0x59)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 tov0 :1;
     uint8 ocf0 :1;
     uint8 tov1 :1;
@@ -131,10 +117,8 @@ typedef union
 } TIFRbits_t;
 #define TIFRbits (*((volatile TIFRbits_t*)(0x58)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 spmen :1;
     uint8 pgers :1;
     uint8 pgwrt :1;
@@ -147,10 +131,8 @@ typedef union
 } SPMCRbits_t;
 #define SPMCRbits (*((volatile SPMCRbits_t*)(0x57)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 twie :1;
     uint8 :1;
     uint8 twen :1;
@@ -163,10 +145,8 @@ typedef union
 } TWCRbits_t;
 #define TWCRbits (*((volatile TWCRbits_t*)(0x56)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 isc00 :1;
     uint8 isc01 :1;
     uint8 isc10 :1;
@@ -176,13 +156,16 @@ typedef union
     uint8 sm2 :1;
     uint8 se :1;
   };
+  struct {
+    uint8 isc0 :2;
+    uint8 isc1 :2;
+    uint8 sm :3;
+  };
 } MCUCRbits_t;
 #define MCUCRbits (*((volatile MCUCRbits_t*)(0x55)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 porf :1;
     uint8 extrf :1;
     uint8 borf :1;
@@ -195,10 +178,8 @@ typedef union
 } MCUCSRbits_t;
 #define MCUCSRbits (*((volatile MCUCSRbits_t*)(0x54)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 cs00 :1;
     uint8 cs01 :1;
     uint8 cs02 :1;
@@ -208,8 +189,7 @@ typedef union
     uint8 wgm00 :1;
     uint8 foc0 :1;
   };
-  struct
-  {
+  struct {
     uint8 cs0 :3;
     uint8 :1;
     uint8 com0 :2;
@@ -218,10 +198,8 @@ typedef union
 } TCCR0bits_t;
 #define TCCR0bits (*((volatile TCCR0bits_t*)(0x53)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 psr10 :1;
     uint8 psr2 :1;
     uint8 pud :1;
@@ -234,10 +212,8 @@ typedef union
 } SFIORbits_t;
 #define SFIORbits (*((volatile SFIORbits_t*)(0x50)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 wgm10 :1;
     uint8 wgm11 :1;
     uint8 foc1b :1;
@@ -247,19 +223,17 @@ typedef union
     uint8 com1a0 :1;
     uint8 com1a1 :1;
   };
-  struct{
-    uint8 wgm1_01: 2;
+  struct {
+    uint8 wgm1_01 :2;
     uint8 :2;
-    uint8 com1b : 2;
-    uint8 com1a : 2;
+    uint8 com1b :2;
+    uint8 com1a :2;
   };
 } TCCR1Abits_t;
 #define TCCR1Abits (*((volatile TCCR1Abits_t*)(0x4F)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 cs10 :1;
     uint8 cs11 :1;
     uint8 cs12 :1;
@@ -269,17 +243,15 @@ typedef union
     uint8 ices1 :1;
     uint8 icnc1 :1;
   };
-  struct{
-    uint8 cs1 : 3;
-    uint8 wgm1_23 : 2;
+  struct {
+    uint8 cs1 :3;
+    uint8 wgm1_23 :2;
   };
 } TCCR1Bbits_t;
 #define TCCR1Bbits (*((volatile TCCR1Bbits_t*)(0x4E)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 cs20 :1;
     uint8 cs21 :1;
     uint8 cs22 :1;
@@ -290,17 +262,15 @@ typedef union
     uint8 foc2 :1;
   };
   struct {
-    uint8 cs2 : 3;
+    uint8 cs2 :3;
     uint8 :1;
-    uint8 com2: 2;
+    uint8 com2 :2;
   };
 } TCCR2bits_t;
 #define TCCR2bits (*((volatile TCCR2bits_t*)(0x45)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 tcr2ub :1;
     uint8 ocr2ub :1;
     uint8 tcn2ub :1;
@@ -313,10 +283,8 @@ typedef union
 } ASSRbits_t;
 #define ASSRbits (*((volatile ASSRbits_t*)(0x42)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 wdp0 :1;
     uint8 wdp1 :1;
     uint8 wdp2 :1;
@@ -329,10 +297,8 @@ typedef union
 } WDTCRbits_t;
 #define WDTCRbits (*((volatile WDTCRbits_t*)(0x41)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 ucpol :1;
     uint8 ucsz0 :1;
     uint8 ucsz1 :1;
@@ -345,10 +311,8 @@ typedef union
 } UCSRCbits_t;
 #define UCSRCbits (*((volatile UCSRCbits_t*)(0x40)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 eear8 :1;
     uint8 eear9 :1;
     uint8 :1;
@@ -361,10 +325,8 @@ typedef union
 } EEARHbits_t;
 #define EEARHbits (*((volatile EEARHbits_t*)(0x3F)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 eere :1;
     uint8 eewe :1;
     uint8 eemwe :1;
@@ -377,10 +339,8 @@ typedef union
 } EECRbits_t;
 #define EECRbits (*((volatile EECRbits_t*)(0x3C)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 porta0 :1;
     uint8 porta1 :1;
     uint8 porta2 :1;
@@ -393,10 +353,8 @@ typedef union
 } PORTAbits_t;
 #define PORTAbits (*((volatile PORTAbits_t*)(0x3B)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 dda0 :1;
     uint8 dda1 :1;
     uint8 dda2 :1;
@@ -409,10 +367,8 @@ typedef union
 } DDRAbits_t;
 #define DDRAbits (*((volatile DDRAbits_t*)(0x3A)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 pina0 :1;
     uint8 pina1 :1;
     uint8 pina2 :1;
@@ -425,10 +381,8 @@ typedef union
 } PINAbits_t;
 #define PINAbits (*((volatile PINAbits_t*)(0x39)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 portb0 :1;
     uint8 portb1 :1;
     uint8 portb2 :1;
@@ -441,10 +395,8 @@ typedef union
 } PORTBbits_t;
 #define PORTBbits (*((volatile PORTBbits_t*)(0x38)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 ddb0 :1;
     uint8 ddb1 :1;
     uint8 ddb2 :1;
@@ -457,10 +409,8 @@ typedef union
 } DDRBbits_t;
 #define DDRBbits (*((volatile DDRBbits_t*)(0x37)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 pinb0 :1;
     uint8 pinb1 :1;
     uint8 pinb2 :1;
@@ -473,10 +423,8 @@ typedef union
 } PINBbits_t;
 #define PINBbits (*((volatile PINBbits_t*)(0x36)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 portc0 :1;
     uint8 portc1 :1;
     uint8 portc2 :1;
@@ -489,10 +437,8 @@ typedef union
 } PORTCbits_t;
 #define PORTCbits (*((volatile PORTCbits_t*)(0x35)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 ddc0 :1;
     uint8 ddc1 :1;
     uint8 ddc2 :1;
@@ -505,10 +451,8 @@ typedef union
 } DDRCbits_t;
 #define DDRCbits (*((volatile DDRCbits_t*)(0x34)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 pinc0 :1;
     uint8 pinc1 :1;
     uint8 pinc2 :1;
@@ -521,10 +465,8 @@ typedef union
 } PINCbits_t;
 #define PINCbits (*((volatile PINCbits_t*)(0x33)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 portd0 :1;
     uint8 portd1 :1;
     uint8 portd2 :1;
@@ -537,10 +479,8 @@ typedef union
 } PORTDbits_t;
 #define PORTDbits (*((volatile PORTDbits_t*)(0x32)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 ddd0 :1;
     uint8 ddd1 :1;
     uint8 ddd2 :1;
@@ -553,10 +493,8 @@ typedef union
 } DDRDbits_t;
 #define DDRDbits (*((volatile DDRDbits_t*)(0x31)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 pind0 :1;
     uint8 pind1 :1;
     uint8 pind2 :1;
@@ -569,10 +507,8 @@ typedef union
 } PINDbits_t;
 #define PINDbits (*((volatile PINDbits_t*)(0x30)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 spi2x :1;
     uint8 :1;
     uint8 :1;
@@ -585,10 +521,8 @@ typedef union
 } SPSRbits_t;
 #define SPSRbits (*((volatile SPSRbits_t*)(0x2E)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 spr0 :1;
     uint8 spr1 :1;
     uint8 cpha :1;
@@ -598,13 +532,14 @@ typedef union
     uint8 spe :1;
     uint8 spie :1;
   };
+  struct {
+    uint8 spr :2;
+  };
 } SPCRbits_t;
 #define SPCRbits (*((volatile SPCRbits_t*)(0x2D)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 mpcm :1;
     uint8 u2x :1;
     uint8 pe :1;
@@ -617,10 +552,8 @@ typedef union
 } UCSRAbits_t;
 #define UCSRAbits (*((volatile UCSRAbits_t*)(0x2B)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 txb8 :1;
     uint8 rxb8 :1;
     uint8 ucsz2 :1;
@@ -633,10 +566,8 @@ typedef union
 } UCSRBbits_t;
 #define UCSRBbits (*((volatile UCSRBbits_t*)(0x2A)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 acis0 :1;
     uint8 acis1 :1;
     uint8 acic :1;
@@ -649,10 +580,8 @@ typedef union
 } ACSRbits_t;
 #define ACSRbits (*((volatile ACSRbits_t*)(0x28)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 mux0 :1;
     uint8 mux1 :1;
     uint8 mux2 :1;
@@ -662,8 +591,7 @@ typedef union
     uint8 refs0 :1;
     uint8 refs1 :1;
   };
-  struct
-  {
+  struct {
     uint8 mux :5;
     uint8 :1;
     uint8 refs :2;
@@ -671,10 +599,8 @@ typedef union
 } ADMUXbits_t;
 #define ADMUXbits (*((volatile ADMUXbits_t*)(0x27)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 adps0 :1;
     uint8 adps1 :1;
     uint8 adps2 :1;
@@ -684,18 +610,15 @@ typedef union
     uint8 adsc :1;
     uint8 aden :1;
   };
-  struct
-  {
+  struct {
     uint8 adps :3;
     uint8 :5;
   };
 } ADCSRAbits_t;
 #define ADCSRAbits (*((volatile ADCSRAbits_t*)(0x26)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 twgce :1;
     uint8 twa0 :1;
     uint8 twa1 :1;
@@ -708,10 +631,8 @@ typedef union
 } TWARbits_t;
 #define TWARbits (*((volatile TWARbits_t*)(0x22)))
 
-typedef union
-{
-  struct
-  {
+typedef union {
+  struct {
     uint8 twps0 :1;
     uint8 twps1 :1;
     uint8 :1;

@@ -11,18 +11,20 @@
  *******************************************************************************/
 
 #include <util/delay.h>
-
-#include "MCAL/USART/usart.h"
+#include "MCAL/SPI/spi.h"
 
 int main(void) {
 
-  USART_init(&g_usart);
+  SPI_init(g_spi);
 
-/*  __asm__("SEI");*/
+  __asm__("SEI");
+
+  uint8 rData;
+
+  SPI_masterSendReceiveByteBlocking(g_defaultSlave, 'a', &rData);
 
   for (;;) {
-    USART_sendStringBlocking("Hello USART !!\r");
-    _delay_ms(500);
+
   }
 }
 
