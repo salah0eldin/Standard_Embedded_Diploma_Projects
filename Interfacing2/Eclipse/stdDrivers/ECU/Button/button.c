@@ -25,7 +25,7 @@
  *******************************************************************************/
 
 /* Global button configuration initialized with default values (port A, pin 0, internal pull-up) */
-BUTTON_t g_button1 = { .port = PORTA_ID, .pin = PIN0_ID, .connection = BUTTON_PULL_UP_INTERNAL };
+BUTTON_t g_button1 = { .port = PORTD_ID, .pin = PIN2_ID, .connection = BUTTON_PULL_UP_EXTERNAL };
 
 /*******************************************************************************
  *                              Functions Definitions                          *
