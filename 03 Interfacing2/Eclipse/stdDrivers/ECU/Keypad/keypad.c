@@ -23,7 +23,7 @@
  *******************************************************************************/
 
 #ifdef SPECIAL_KEYPAD
-const uint8 *keys = NULL_PTR;
+const uint8 *g_keys = NULL_PTR;
 #else
 #ifndef STANDARD_KEYPAD
 
@@ -55,24 +55,26 @@ static uint8 KEYPAD_4x4_adjustKeyNumber(uint8 button_number);
  *              key press detection.
  */
 void KEYPAD_init(void) {
-	uint8 col = 0, row = 0;
+  uint8 col = 0, row = 0;
 
-	// Set row pins as input
-	for (; row < KEYPAD_NUM_ROWS; row++) {
-		GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
-		KEYPAD_FIRST_ROW_PIN_ID + row, PIN_INPUT);
-	}
+  // Set row pins as input
+  for (; row < KEYPAD_NUM_ROWS; row++) {
+    GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
+    KEYPAD_FIRST_ROW_PIN_ID + row,
+			   PIN_INPUT);
+  }
 
-	// Set column pins as input
-	for (; col < KEYPAD_NUM_COLS; col++) {
-		GPIO_setupPinDirection(KEYPAD_COL_PORT_ID,
-		KEYPAD_FIRST_COL_PIN_ID + col, PIN_INPUT);
-	}
+  // Set column pins as input
+  for (; col < KEYPAD_NUM_COLS; col++) {
+    GPIO_setupPinDirection(KEYPAD_COL_PORT_ID,
+    KEYPAD_FIRST_COL_PIN_ID + col,
+			   PIN_INPUT);
+  }
 }
 
 #ifdef SPECIAL_KEYPAD
-void KEYPAD_setKeys(const uint8 * keysO){
-	keys = keysO;
+void KEYPAD_setKeys(const uint8 *keysO) {
+  g_keys = keysO;
 }
 #endif
 
@@ -81,33 +83,34 @@ void KEYPAD_setKeys(const uint8 * keysO){
  *              corresponding key value or KEYPAD_NO_KEY if no key is pressed.
  */
 uint8 KEYPAD_getPressedKey(void) {
-	uint8 col = 0, row = 0;
-	uint8 key = KEYPAD_NO_KEY; // Initialize key variable
+  uint8 col = 0, row = 0;
+  uint8 key = KEYPAD_NO_KEY; // Initialize key variable
 
-	// Loop through each row to check for key presses
-	for (; row < KEYPAD_NUM_ROWS; row++) {
-		/*
-		 * Set the current row as OUTPUT and clear its pin to indicate it is active.
-		 */
-		GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
-		KEYPAD_FIRST_ROW_PIN_ID + row, PIN_OUTPUT);
+  // Loop through each row to check for key presses
+  for (; row < KEYPAD_NUM_ROWS; row++) {
+    /*
+     * Set the current row as OUTPUT and clear its pin to indicate it is active.
+     */
+    GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
+    KEYPAD_FIRST_ROW_PIN_ID + row,
+			   PIN_OUTPUT);
 
-		// Activate the current row by setting it to LOW
-		GPIO_writePin(KEYPAD_ROW_PORT_ID, KEYPAD_FIRST_ROW_PIN_ID + row,
-		KEYPAD_BUTTON_PRESSED);
+    // Activate the current row by setting it to LOW
+    GPIO_writePin(KEYPAD_ROW_PORT_ID, KEYPAD_FIRST_ROW_PIN_ID + row,
+    KEYPAD_BUTTON_PRESSED);
 
-		// Loop through each column to check if any key is pressed
-		for (col = 0; col < KEYPAD_NUM_COLS; col++) {
-			/* Check if the switch is pressed in this column */
-			if (GPIO_readPin(KEYPAD_COL_PORT_ID,
-			KEYPAD_FIRST_COL_PIN_ID + col) == KEYPAD_BUTTON_PRESSED) {
-				_delay_ms(20); // Delay for debouncing
-				// Wait until the key is released
-				while (GPIO_readPin(KEYPAD_COL_PORT_ID,
-				KEYPAD_FIRST_COL_PIN_ID + col) == KEYPAD_BUTTON_PRESSED)
-					;
+    // Loop through each column to check if any key is pressed
+    for (col = 0; col < KEYPAD_NUM_COLS; col++) {
+      /* Check if the switch is pressed in this column */
+      if (GPIO_readPin(KEYPAD_COL_PORT_ID,
+      KEYPAD_FIRST_COL_PIN_ID + col) == KEYPAD_BUTTON_PRESSED) {
+	_delay_ms(20); // Delay for debouncing
+	// Wait until the key is released
+	while (GPIO_readPin(KEYPAD_COL_PORT_ID,
+	KEYPAD_FIRST_COL_PIN_ID + col) == KEYPAD_BUTTON_PRESSED)
+	  ;
 #ifdef SPECIAL_KEYPAD
-					key = keys[(row * KEYPAD_NUM_COLS) + col];
+	key = g_keys[(row * KEYPAD_NUM_COLS) + col];
 #else
 #if (KEYPAD_NUM_COLS == 3)
 	#ifdef STANDARD_KEYPAD
@@ -124,16 +127,17 @@ uint8 KEYPAD_getPressedKey(void) {
 #endif
 #endif
 #endif /* SPECIAL_KEYPAD */
-				break;
-			}
-		}
-		// Reset the row pin direction to INPUT after scanning
-		GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
-		KEYPAD_FIRST_ROW_PIN_ID + row, PIN_INPUT);
-		_delay_ms(5); /* Small delay to fix CPU load issue in Proteus */
-	}
+	break;
+      }
+    }
+    // Reset the row pin direction to INPUT after scanning
+    GPIO_setupPinDirection(KEYPAD_ROW_PORT_ID,
+    KEYPAD_FIRST_ROW_PIN_ID + row,
+			   PIN_INPUT);
+    _delay_ms(5); /* Small delay to fix CPU load issue in Proteus */
+  }
 
-	return key; // Return the detected key value
+  return key; // Return the detected key value
 }
 
 #if !defined(STANDARD_KEYPAD) && !defined(SPECIAL_KEYPAD)
@@ -234,9 +238,9 @@ static uint8 KEYPAD_4x4_adjustKeyNumber(uint8 button_number) {
  *              returns the detected key value when one is pressed.
  */
 uint8 KEYPAD_getPressedKeyBlocking(void) {
-	uint8 input = KEYPAD_NO_KEY; // Initialize input variable
-	while (input == KEYPAD_NO_KEY) { // Loop until a key is detected
-		input = KEYPAD_getPressedKey(); // Get the pressed key
-	}
-	return input; // Return the detected key value
+  uint8 input = KEYPAD_NO_KEY; // Initialize input variable
+  while (input == KEYPAD_NO_KEY) { // Loop until a key is detected
+    input = KEYPAD_getPressedKey(); // Get the pressed key
+  }
+  return input; // Return the detected key value
 }

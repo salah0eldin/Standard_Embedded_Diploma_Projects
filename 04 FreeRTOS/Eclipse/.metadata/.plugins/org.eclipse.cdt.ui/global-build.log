@@ -1,9 +1,48 @@
-01:44:18 **** Incremental Build of configuration Debug for project demoTest ****
+06:40:31 **** Build of configuration Debug for project demoTest ****
 make all 
+Building file: ../FreeRTOS/croutine.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"FreeRTOS/croutine.d" -MT"FreeRTOS/croutine.o" -c -o "FreeRTOS/croutine.o" "../FreeRTOS/croutine.c"
+Finished building: ../FreeRTOS/croutine.c
+ 
+Building file: ../FreeRTOS/heap_2.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"FreeRTOS/heap_2.d" -MT"FreeRTOS/heap_2.o" -c -o "FreeRTOS/heap_2.o" "../FreeRTOS/heap_2.c"
+../FreeRTOS/heap_2.c: In function 'prvHeapInit':
+../FreeRTOS/heap_2.c:297: warning: cast from pointer to integer of different size
+Finished building: ../FreeRTOS/heap_2.c
+ 
+Building file: ../FreeRTOS/list.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"FreeRTOS/list.d" -MT"FreeRTOS/list.o" -c -o "FreeRTOS/list.o" "../FreeRTOS/list.c"
+Finished building: ../FreeRTOS/list.c
+ 
+Building file: ../FreeRTOS/port.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"FreeRTOS/port.d" -MT"FreeRTOS/port.o" -c -o "FreeRTOS/port.o" "../FreeRTOS/port.c"
+Finished building: ../FreeRTOS/port.c
+ 
 Building file: ../FreeRTOS/queue.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"FreeRTOS/queue.d" -MT"FreeRTOS/queue.o" -c -o "FreeRTOS/queue.o" "../FreeRTOS/queue.c"
 Finished building: ../FreeRTOS/queue.c
+ 
+Building file: ../FreeRTOS/tasks.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"FreeRTOS/tasks.d" -MT"FreeRTOS/tasks.o" -c -o "FreeRTOS/tasks.o" "../FreeRTOS/tasks.c"
+../FreeRTOS/tasks.c: In function 'prvInitialiseNewTask':
+../FreeRTOS/tasks.c:808: warning: cast from pointer to integer of different size
+../FreeRTOS/tasks.c:808: warning: cast to pointer from integer of different size
+Finished building: ../FreeRTOS/tasks.c
+ 
+Building file: ../main.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"main.d" -MT"main.o" -c -o "main.o" "../main.c"
+In file included from ../main.c:80:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../main.c: In function 'main':
+../main.c:94: warning: passing argument 1 of 'xTaskCreate' from incompatible pointer type
+Finished building: ../main.c
  
 Building target: demoTest.elf
 Invoking: AVR C Linker
