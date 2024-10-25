@@ -642,6 +642,11 @@ typedef union {
     uint8 tws6 :1;
     uint8 tws7 :1;
   };
+  struct {
+    uint8 twps : 2;
+    uint8 :1;
+    uint8 tws : 5;
+  };
 } TWSRbits_t;
 #define TWSRbits (*((volatile TWSRbits_t*)(0x21)))
 

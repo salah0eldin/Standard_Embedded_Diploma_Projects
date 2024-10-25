@@ -39,6 +39,25 @@ typedef enum{
   I2C_MR_LOST_ARBITRATION = 0x38        /* Arbitration lost in SLA+R or data bytes                    */
 } I2C_statusMasterReceive;
 
+typedef enum{
+  I2C_SR_SLA_W_RECEIVE_ACK = 0x60,    	/* Own SLA+W has been received & ACK has been returned                */
+  I2C_SR_ARB_LOST_SLA_W_ACK = 0x68,   	/* Arbitration lost, own SLA+W has been received & ACK returned       */
+  I2C_SR_GCALL_RECEIVE_ACK = 0x70,    	/* General call address received & ACK returned                       */
+  I2C_SR_ARB_LOST_GCALL_ACK = 0x78,   	/* Arbitration lost, general call address received & ACK returned     */
+  I2C_SR_DATA_RECEIVE_ACK = 0x80,     	/* Data byte has been received & ACK returned                         */
+  I2C_SR_DATA_RECEIVE_NACK = 0x88,    	/* Data byte has been received & NOT ACK returned                     */
+  I2C_SR_GCALL_DATA_RECEIVE_ACK = 0x90,	/* Data byte received after general call & ACK returned               */
+  I2C_SR_GCALL_DATA_RECEIVE_NACK = 0x98,/* Data byte received after general call & NOT ACK returned           */
+  I2C_SR_STOP_REPEATED_START = 0xA0   	/* STOP or repeated START condition has been received while addressed */
+} I2C_statusSlaveReceive;
+
+typedef enum{
+  I2C_ST_SLA_R_RECEIVE_ACK = 0xA8,    	  /* Own SLA+R has been received & ACK returned                     */
+  I2C_ST_ARB_LOST_SLA_R_ACK = 0xB0,   	  /* Arbitration lost, own SLA+R has been received & ACK returned   */
+  I2C_ST_DATA_SEND_ACK_RECEIVE = 0xB8,	  /* Data byte has been transmitted & ACK received                  */
+  I2C_ST_DATA_SEND_NACK_RECEIVE = 0xC0,	  /* Data byte has been transmitted & NOT ACK received              */
+  I2C_ST_LAST_DATA_SEND_ACK_RECEIVE = 0xC /* Last data byte transmitted (TWEA = 0) & ACK received           */
+} I2C_statusSlaveTransmit;
 
 /*
  * Formula to calculate the I2C SCL (Serial Clock Line) frequency:
@@ -75,6 +94,11 @@ typedef enum{
   I2C_GENERAL_CALL_ENABLE
 } I2C_generalCall;
 
+typedef enum{
+  I2C_N_ACK,
+  I2C_ACK
+} I2C_ACKReceiver;
+
 typedef struct{
   uint8 bitRateRegisterVal;
   uint8 prescaler;
@@ -82,13 +106,21 @@ typedef struct{
   uint8 generalCallState;
 } I2C_t;
 
+typedef uint8 i2cReturn;
+
 extern I2C_t g_i2c;
 
-void I2C_init(I2C_t g_i2c);
+void I2C_init(I2C_t * i2c);
 
-uint8 I2C_sendByte(uint8 data);
+uint8 I2C_getStatus(void);
 
-uint8 I2C_receiveByte(uint8 *data);
+i2cReturn I2C_sendStart();
+
+i2cReturn I2C_sendStop();
+
+i2cReturn I2C_sendByte(uint8 data);
+
+i2cReturn I2C_receiveByte(uint8 *data, uint8 ACK);
 
 #ifdef I2C_INTERRUPT_ENABLE
 void I2C_setInterruptHandler(void(*i2cInterruptHandler)(void));
