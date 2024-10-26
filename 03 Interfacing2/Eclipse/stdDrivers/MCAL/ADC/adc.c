@@ -19,7 +19,7 @@
 #include "../GPIO/gpio.h"
 #include <avr/interrupt.h>
 
-#include "../../common_macros.h"
+#include "../../LIB/common_macros.h"
 
 /*******************************************************************************
  *                              Global Variables                               *

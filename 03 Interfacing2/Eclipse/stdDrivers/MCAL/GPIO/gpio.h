@@ -20,8 +20,8 @@
  *******************************************************************************/
 #include "avr/io.h"
 
-#include "../../common_macros.h"
-#include "../../std_types.h"
+#include "../../LIB/common_macros.h"
+#include "../../LIB/std_types.h"
 #include "gpio_registers.h"
 
 /*******************************************************************************

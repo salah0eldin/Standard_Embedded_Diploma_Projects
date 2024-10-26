@@ -10,8 +10,8 @@
  * Author: Salah-Eldin
  *******************************************************************************/
 
-#ifndef STD_TYPES_H_
-#define STD_TYPES_H_
+#ifndef LIB_STD_TYPES_H_
+#define LIB_STD_TYPES_H_
 
 /*******************************************************************************
  *                                Includes                                     *
@@ -22,6 +22,12 @@
 /*******************************************************************************
  *                                Data Types                                   *
  *******************************************************************************/
+
+typedef enum{
+  STD_FAIL,         /* Operation failed */
+  STD_SUCCESS       /* Operation successful */
+} STD_returnStatus;
+
 
 /* Boolean Data Type */
 typedef unsigned char boolean;  /* Represents boolean values (TRUE/FALSE) */
@@ -54,6 +60,8 @@ typedef unsigned char boolean;  /* Represents boolean values (TRUE/FALSE) */
 typedef unsigned char         uint8;    /**< Unsigned 8-bit integer (0 to 255) */
 typedef signed char           sint8;    /**< Signed 8-bit integer (-128 to +127) */
 
+typedef uint8 stdReturn;
+
 /* Unsigned and signed 16-bit integer */
 typedef unsigned short        uint16;   /**< Unsigned 16-bit integer (0 to 65535) */
 typedef signed short          sint16;   /**< Signed 16-bit integer (-32768 to +32767) */
@@ -74,4 +82,4 @@ typedef signed long long      sint64;   /**< Signed 64-bit integer (-92233720368
 typedef float                 float32;  /**< 32-bit floating point number */
 typedef double                float64;  /**< 64-bit floating point number */
 
-#endif /* STD_TYPES_H_ */
+#endif /* LIB_STD_TYPES_H_ */
