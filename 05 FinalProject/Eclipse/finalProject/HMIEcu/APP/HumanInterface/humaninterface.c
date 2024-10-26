@@ -42,6 +42,83 @@ void HI_enterPassword(void) {
 		;
 }
 
+void HI_getAndCheckPass(void) {
+	do {
+		LCD_clearScreen();
+		LCD_displayString("Enter the Pass");
+		HI_enterPassword();
+		receiveValue = SHARED_FAIL;
+		if (xQueueReceive(g_xQueueReceive, &receiveValue,
+				pdMS_TO_TICKS(300)) == pdPASS) {
+		}
+		LCD_clearScreen();
+		switch (receiveValue) {
+		case SHARED_FAIL:
+			LCD_displayString("Control Error");
+			LCD_displayStringRowColumn(1, 0, "Try again!");
+			vTaskDelay(pdMS_TO_TICKS(500));
+			break;
+		case SHARED_PASS_DONT_MATCH:
+			passTimes--;
+			LCD_displayString("Wrong Password!");
+			LCD_moveCursor(1, 0);
+			LCD_displayNumber(passTimes);
+			LCD_displayString(" Remaning Tries");
+			vTaskDelay(pdMS_TO_TICKS(500));
+			break;
+		}
+		if (passTimes == 0) {
+			sendValue = SHARED_BUZZER_ON;
+			if (xQueueSend(g_xQueueSend, &sendValue, (TickType_t)20) == pdPASS) {
+			}
+			LCD_clearScreen();
+			LCD_displayString("System Locked");
+			LCD_displayStringRowColumn(1, 0, "Wait For 1 Min");
+			vTaskDelay(pdMS_TO_TICKS(1000));
+			while (timeToWait != 0) {
+				LCD_moveCursor(1, 9);
+				LCD_displayNumber(timeToWait);
+				LCD_displayString(" Sec  ");
+				vTaskDelay(pdMS_TO_TICKS(1000));
+				timeToWait--;
+			}
+			sendValue = SHARED_BUZZER_OFF;
+			if (xQueueSend(g_xQueueSend, &sendValue, (TickType_t)20) == pdPASS) {
+			}
+			passTimes = 3;
+		}
+	} while (receiveValue != SHARED_SUCCESS);
+	passTimes = 3;
+}
+
+void HI_updatePass(void) {
+	do {
+		LCD_clearScreen();
+		LCD_displayString("Enter new Pass");
+		HI_enterPassword();
+		LCD_clearScreen();
+		LCD_displayString("ReEnter new Pass");
+		HI_enterPassword();
+		receiveValue = SHARED_FAIL;
+		if (xQueueReceive(g_xQueueReceive, &receiveValue,
+				pdMS_TO_TICKS(300)) == pdPASS) {
+		}
+		LCD_clearScreen();
+		switch (receiveValue) {
+		case SHARED_FAIL:
+			LCD_displayString("Control Error");
+			LCD_displayStringRowColumn(1, 0, "Try again!");
+			vTaskDelay(pdMS_TO_TICKS(500));
+			break;
+		case SHARED_PASS_DONT_MATCH:
+			LCD_displayString("Passwords don't");
+			LCD_displayStringRowColumn(1, 0, "Match !");
+			vTaskDelay(pdMS_TO_TICKS(500));
+			break;
+		}
+	} while (receiveValue != SHARED_SUCCESS);
+}
+
 void HI_task(void *pvParameters) {
 	LCD_init();
 	KEYPAD_init();
@@ -49,7 +126,7 @@ void HI_task(void *pvParameters) {
 
 	LCD_displayString("Door Lock System");
 	LCD_displayStringRowColumn(1, 0, "Loading...");
-	_delay_ms(500);
+	_delay_ms(300);
 
 	for (;;) {
 		sendValue = SHARED_CHECK_PASS_EXIST;
@@ -64,78 +141,14 @@ void HI_task(void *pvParameters) {
 	}
 
 	if (receiveValue == SHARED_SUCCESS) {
-		do {
-			LCD_clearScreen();
-			LCD_displayString("Enter the Pass");
-			HI_enterPassword();
-			receiveValue = SHARED_FAIL;
-			if (xQueueReceive(g_xQueueReceive, &receiveValue,
-					pdMS_TO_TICKS(300)) == pdPASS) {
-			}
-			LCD_clearScreen();
-			switch (receiveValue) {
-			case SHARED_FAIL:
-				LCD_displayString("Control Error");
-				LCD_displayStringRowColumn(1, 0, "Try again!");
-				vTaskDelay(pdMS_TO_TICKS(500));
-				break;
-			case SHARED_PASS_DONT_MATCH:
-				passTimes--;
-				LCD_displayString("Wrong Password!");
-				LCD_moveCursor(1, 0);
-				LCD_displayNumber(passTimes);
-				LCD_displayString(" Remaning Tries");
-				vTaskDelay(pdMS_TO_TICKS(500));
-				break;
-			}
-			if (passTimes == 0) {
-				LCD_clearScreen();
-				LCD_displayString("System Locked");
-				LCD_displayStringRowColumn(1, 0, "Wait For 1 Min");
-				vTaskDelay(pdMS_TO_TICKS(1000));
-				while (timeToWait != 0) {
-					LCD_moveCursor(1, 9);
-					LCD_displayNumber(timeToWait);
-					LCD_displayString(" Sec  ");
-					vTaskDelay(pdMS_TO_TICKS(1000));
-					timeToWait--;
-				}
-				passTimes = 3;
-			}
-		} while (receiveValue != SHARED_SUCCESS);
-		passTimes = 3;
+		HI_getAndCheckPass();
 		LCD_clearScreen();
 		LCD_displayString("System Un-Locked");
 		LCD_displayStringRowColumn(1, 0, "Welcome !");
-		vTaskDelay(pdMS_TO_TICKS(1000));
+		vTaskDelay(pdMS_TO_TICKS(500));
 
 	} else {
-		do {
-			LCD_clearScreen();
-			LCD_displayString("Enter new Pass");
-			HI_enterPassword();
-			LCD_clearScreen();
-			LCD_displayString("ReEnter new Pass");
-			HI_enterPassword();
-			receiveValue = SHARED_FAIL;
-			if (xQueueReceive(g_xQueueReceive, &receiveValue,
-					pdMS_TO_TICKS(300)) == pdPASS) {
-			}
-			LCD_clearScreen();
-			switch (receiveValue) {
-			case SHARED_FAIL:
-				LCD_displayString("Control Error");
-				LCD_displayStringRowColumn(1, 0, "Try again!");
-				vTaskDelay(pdMS_TO_TICKS(500));
-				break;
-			case SHARED_PASS_DONT_MATCH:
-				LCD_displayString("Passwords don't");
-				LCD_displayStringRowColumn(1, 0, "Match !");
-				vTaskDelay(pdMS_TO_TICKS(500));
-				break;
-			}
-		} while (receiveValue != SHARED_SUCCESS);
-
+		HI_updatePass();
 	}
 
 	for (;;) {
@@ -147,9 +160,15 @@ void HI_task(void *pvParameters) {
 			if (key == '-' || key == '+') {
 				if (xQueueSend(g_xQueueSend, &key, (TickType_t)20) == pdPASS) {
 				}
-				LCD_clearScreen();
-				LCD_displayString("Enter the Pass");
-				HI_enterPassword();
+				HI_getAndCheckPass();
+				switch (key) {
+				case '+':
+
+					break;
+				case '-':
+					HI_updatePass();
+					break;
+				}
 			}
 		}
 	}

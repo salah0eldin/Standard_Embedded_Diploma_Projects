@@ -18,7 +18,7 @@ static uint8 pass[5] = { 0 };
 uint8 passTemp[5] = { 0 };
 uint8 equality = FALSE;
 uint8 i = 0;
-
+uint8 passTimes = 3;
 SemaphoreHandle_t usartReceiveSemphr;
 
 uint8 g_dataReceive;
@@ -72,6 +72,7 @@ void HMI_usartReceiverTask(void *pvParameters) {
 				}
 
 				break;
+
 			}
 
 		}
@@ -103,12 +104,27 @@ void PASSHANDLER_checkPass(void) {
 			}
 		}
 		if (equality == FALSE) {
+			passTimes--;
 			g_dataSend = SHARED_PASS_DONT_MATCH;
 		} else {
 			g_dataSend = SHARED_SUCCESS;
 		}
 		if (xQueueSend(g_xQueueSend, &g_dataSend, (TickType_t)20) == pdPASS) {
 
+		}
+		while (passTimes == 0) {
+			if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
+
+				switch (g_dataReceive) {
+				case SHARED_BUZZER_ON:
+					BUZZER_turnOn(&g_buzzer1);
+					break;
+				case SHARED_BUZZER_OFF:
+					passTimes = 3;
+					BUZZER_turnOff(&g_buzzer1);
+					break;
+				}
+			}
 		}
 
 	} while (equality == FALSE);
