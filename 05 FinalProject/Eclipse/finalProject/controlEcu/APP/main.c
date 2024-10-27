@@ -40,7 +40,7 @@ int main() {
 	}
 
 	if (pdPASS
-			!= xTaskCreate(HMI_usartReceiverTask, "HMR", 800, NULL, 3, NULL)) {
+			!= xTaskCreate(CI_usartTask, "HMR", 800, NULL, 3, NULL)) {
 		return 0;
 	}
 
