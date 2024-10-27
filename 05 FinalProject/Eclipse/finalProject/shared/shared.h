@@ -8,9 +8,6 @@
  * Author: Salah-Eldin
  *******************************************************************************/
 
-#define SHARED_LOGGED_IN		0x01
-#define SHARED_LOGGED_OUT		0x02
-
 #define SHARED_SUCCESS			0x03
 #define SHARED_FAIL				0x04
 
@@ -22,7 +19,11 @@
 #define SHARED_BUZZER_ON		0x08
 #define SHARED_BUZZER_OFF		0x09
 
-#define SHARED_FIRST_PASSWORD	0x10
-#define SHARED_SECOND_PASSWORD	0X20
+#define SHARED_OPEN_DOOR		'+'
+#define SHARED_CHANGE_PASS		'-'
+
+#define SHARED_WAIT_PEOPLE		0x0A
+#define SHARED_LOCKING_DOOR		0x0B
+#define SHARED_DOOR_CLOSED		0x0C
 
 #define SHARED_PASS_LENGTH		5

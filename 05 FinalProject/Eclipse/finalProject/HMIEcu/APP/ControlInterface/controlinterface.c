@@ -13,11 +13,10 @@
 #include "../queues.h"
 
 SemaphoreHandle_t usartReceiveSemphr;
-uint8 dataReceive;
 
 void CI_usartReceiveIntHandl(void) {
+	uint8 dataReceive;
 	USART_receiveCharNonBlocking(&dataReceive);
-//	xSemaphoreGiveFromISR(usartReceiveSemphr, NULL);
 	if (xQueueSend(g_xQueueReceive, &dataReceive, (TickType_t)20) == pdPASS) {
 
 	}
@@ -39,22 +38,3 @@ void CI_usartSenderTask(void *pvParameters) {
 	}
 }
 
-//void CI_usartReceiverTask(void *pvParameters) {
-//	if (USART_isInit() == FALSE) {
-//		USART_init(&g_usart);
-//	}
-//
-//	usartReceiveSemphr = xSemaphoreCreateBinary();
-
-//USART_setRXCompleteInterruptHandler(CI_usartReceiveIntHandl);
-
-//	for (;;) {
-//		if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
-//
-//		}
-//
-//		if (xQueueSend(g_xQueueReceive, &dataReceive, (TickType_t)20) == pdPASS) {
-//
-//		}
-//	}
-//}

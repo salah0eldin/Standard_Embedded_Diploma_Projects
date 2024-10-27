@@ -28,7 +28,7 @@ int main() {
 		return 0;
 	}
 
-	if(pdPASS != xTaskCreate(HI_task, "HI", 800, NULL, 1, NULL)){
+	if(pdPASS != xTaskCreate(HI_task, "HI", 1000, NULL, 1, NULL)){
 		return 0;
 	}
 

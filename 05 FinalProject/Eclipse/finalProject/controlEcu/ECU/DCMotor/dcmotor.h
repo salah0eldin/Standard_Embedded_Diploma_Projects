@@ -87,6 +87,6 @@ void DCMOTOR_stop(DCMOTOR_t * dcmotor);
  *
  * @param speed The speed value to set for the motor (typically a value between 0 and 100).
  */
-void DCMOTOR_setSpeed(uint8 speed);
+//void DCMOTOR_setSpeed(uint8 speed);
 
 #endif /* ECU_DCMOTOR_DCMOTOR_H_ */

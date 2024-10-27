@@ -12,10 +12,10 @@
 #include "../../ECU/I2C_EEPROM/i2c_eeprom.h"
 #include "../../ECU/Buzzer/buzzer.h"
 #include "../../MCAL/USART/usart.h"
-#include "../queues.h"
+#include "../globals.h"
 
-static uint8 pass[5] = { 0 };
-uint8 passTemp[5] = { 0 };
+static uint8 pass[SHARED_PASS_LENGTH] = { 0 };
+uint8 passTemp[SHARED_PASS_LENGTH] = { 0 };
 uint8 equality = FALSE;
 uint8 i = 0;
 uint8 passTimes = 3;
@@ -66,11 +66,23 @@ void HMI_usartReceiverTask(void *pvParameters) {
 
 				}
 				if (ret == SHARED_SUCCESS) {
-					PASSHANDLER_checkPass();
+					while (PASSHANDLER_checkPass() == FALSE)
+						;
 				} else {
-					PASSHANDLER_updatePass();
+					while (PASSHANDLER_updatePass() == FALSE)
+						;
 				}
 
+				break;
+			case SHARED_OPEN_DOOR:
+				if (PASSHANDLER_checkPass() == TRUE) {
+					xSemaphoreGive(g_doorSemphr);
+				}
+				break;
+			case SHARED_CHANGE_PASS:
+				if (PASSHANDLER_checkPass() == TRUE) {
+					PASSHANDLER_updatePass();
+				}
 				break;
 
 			}
@@ -88,17 +100,17 @@ uint8 PASSHANDLER_isPassExist(void) {
 
 	if (val == PASSHANDLER_PASS_EXIST) {
 		ret = TRUE;
-		I2C_EEPROM_receiveData(PASSHANDLER_PASS_ADDR, pass, 5);
+		I2C_EEPROM_receiveData(PASSHANDLER_PASS_ADDR, pass, SHARED_PASS_LENGTH);
 	}
 
 	return (ret == TRUE) ? SHARED_SUCCESS : SHARED_FAIL;
 }
 
-void PASSHANDLER_checkPass(void) {
+uint8 PASSHANDLER_checkPass(void) {
 	do {
 		i = 0;
 		equality = TRUE;
-		while (i < 5) {
+		while (i < SHARED_PASS_LENGTH) {
 			if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
 				equality &= (pass[i++] == g_dataReceive);
 			}
@@ -112,57 +124,61 @@ void PASSHANDLER_checkPass(void) {
 		if (xQueueSend(g_xQueueSend, &g_dataSend, (TickType_t)20) == pdPASS) {
 
 		}
-		while (passTimes == 0) {
-			if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
-
-				switch (g_dataReceive) {
-				case SHARED_BUZZER_ON:
-					BUZZER_turnOn(&g_buzzer1);
-					break;
-				case SHARED_BUZZER_OFF:
-					passTimes = 3;
-					BUZZER_turnOff(&g_buzzer1);
-					break;
+		if (passTimes == 0) {
+			do {
+				if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
 				}
-			}
+			} while (SHARED_BUZZER_ON != g_dataReceive);
+			BUZZER_turnOn(&g_buzzer1);
+			do {
+				if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
+				}
+			} while (SHARED_BUZZER_OFF != g_dataReceive);
+			BUZZER_turnOff(&g_buzzer1);
 		}
 
-	} while (equality == FALSE);
+	} while (passTimes != 0 && equality == FALSE);
+	passTimes = 3;
+	return equality;
 }
 
-void PASSHANDLER_updatePass(void) {
-	do {
-		i = 0;
-		equality = TRUE;
-		while (i < 5) {
-			if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
-				passTemp[i++] = g_dataReceive;
-			}
-		}
-		i = 0;
-		while (i < 5) {
-			if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
-				equality &= (passTemp[i++] == g_dataReceive);
-			}
-		}
-		if (equality == FALSE) {
-			g_dataSend = SHARED_PASS_DONT_MATCH;
-		} else {
-			g_dataSend = SHARED_SUCCESS;
-		}
-		if (xQueueSend(g_xQueueSend, &g_dataSend, (TickType_t)20) == pdPASS) {
+uint8 PASSHANDLER_updatePass(void) {
 
-		}
-	} while (equality == FALSE);
-
-	I2C_EEPROM_sendByte(PASSHANDLER_IS_PASS_ADDR, PASSHANDLER_PASS_EXIST);
-	vTaskDelay(pdMS_TO_TICKS(100));
-	I2C_EEPROM_sendData(PASSHANDLER_PASS_ADDR, passTemp, 5);
 	i = 0;
-	while (i < 5) {
-		pass[i] = passTemp[i];
-		i++;
+	equality = TRUE;
+	while (i < SHARED_PASS_LENGTH) {
+		if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
+			passTemp[i++] = g_dataReceive;
+		}
+	}
+	i = 0;
+	while (i < SHARED_PASS_LENGTH) {
+		if (xSemaphoreTake(usartReceiveSemphr, portMAX_DELAY) == pdTRUE) {
+			equality &= (passTemp[i++] == g_dataReceive);
+		}
+	}
+	if (equality == FALSE) {
+		g_dataSend = SHARED_PASS_DONT_MATCH;
+	} else {
+		g_dataSend = SHARED_SUCCESS;
 	}
 
+	if (xQueueSend(g_xQueueSend, &g_dataSend, (TickType_t)20) == pdPASS) {
+
+	}
+
+	if (equality == TRUE) {
+		I2C_EEPROM_sendByte(PASSHANDLER_IS_PASS_ADDR, PASSHANDLER_PASS_EXIST);
+		vTaskDelay(pdMS_TO_TICKS(100));
+		I2C_EEPROM_sendData(PASSHANDLER_PASS_ADDR, passTemp,
+		SHARED_PASS_LENGTH);
+		i = 0;
+		while (i < SHARED_PASS_LENGTH) {
+			pass[i] = passTemp[i];
+			i++;
+		}
+	}
+
+	return (g_dataSend == SHARED_SUCCESS);
 }
 

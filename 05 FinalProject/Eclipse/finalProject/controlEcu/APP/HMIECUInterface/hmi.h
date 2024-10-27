@@ -23,8 +23,8 @@ void HMI_usartReceiverTask(void *pvParameters);
 
 uint8 PASSHANDLER_isPassExist(void);
 
-void PASSHANDLER_checkPass(void);
+uint8 PASSHANDLER_checkPass(void);
 
-void PASSHANDLER_updatePass(void);
+uint8 PASSHANDLER_updatePass(void);
 
 #endif /* APP_HMIECUINTERFACE_HMI_H_ */
