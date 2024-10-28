@@ -26,15 +26,9 @@
 /*******************************************************************************
  *                             Global Variables                                *
  *******************************************************************************/
-
-/* Queue for receiving data */
-QueueHandle_t g_xQueueReceive;
-
-/* Queue for sending data */
-QueueHandle_t g_xQueueSend;
-
-/* Semaphore for door control synchronization */
-SemaphoreHandle_t g_doorSemphr;
+QueueHandle_t g_xQueueReceive; 	/* Queue for receiving data */
+QueueHandle_t g_xQueueSend; 	/* Queue for sending data   */
+SemaphoreHandle_t g_doorSemphr; /* Semaphore for door control synchronization */
 
 /*******************************************************************************
  *                                  Main                                       *
@@ -76,9 +70,12 @@ int main() {
     }
 
     /* Create the USART receiver task with a stack size of 800 and priority 3 */
-    if (pdPASS != xTaskCreate(HMI_usartReceiverTask, "HMR", 800, NULL, 3, NULL)) {
+    if (pdPASS != xTaskCreate(HMI_usartReceiverTask, "HMR", 850, NULL, 3, NULL)) {
         return 0; /* Return if task creation fails */
     }
+
+    /* Enable global interrupts */
+    __asm__("SEI");
 
     /* Start the FreeRTOS scheduler */
     vTaskStartScheduler();

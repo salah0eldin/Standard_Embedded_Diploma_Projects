@@ -26,12 +26,18 @@
  *                              Global Variables                               *
  *******************************************************************************/
 QueueHandle_t g_xQueueReceive;  /* Queue for receiving data */
-QueueHandle_t g_xQueueSend;     /* Queue for sending data */
+QueueHandle_t g_xQueueSend;     /* Queue for sending data	*/
 
 /*******************************************************************************
  *                              Main Function                                  *
  *******************************************************************************/
 
+/**
+ * @brief Main function that initializes queues, and tasks, then
+ *        starts the FreeRTOS scheduler.
+ *
+ * @return int Returns 0 if any initialization fails, otherwise FreeRTOS takes over.
+ */
 int main() {
     /* Create the receive queue with a maximum of 5 items of size uint8 */
     g_xQueueReceive = xQueueCreate(5, sizeof(uint8));
@@ -60,4 +66,7 @@ int main() {
 
     /* Start the FreeRTOS scheduler */
     vTaskStartScheduler();
+
+    /* Return 0 if the scheduler exits (this should not happen) */
+    return 0;
 }
