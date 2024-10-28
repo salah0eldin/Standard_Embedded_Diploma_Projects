@@ -208,7 +208,7 @@
      <ITEM name="DispFormat">2</ITEM>
      <ITEM name="ShowChanges">Yes</ITEM>
      <ITEM name="ShowToolTips">Yes</ITEM>
-     <ITEM name="TopLineAddress">000005A0</ITEM>
+     <ITEM name="TopLineAddress">000001F0</ITEM>
     </PROPERTIES>
    </POPUP>
    <POPUP w="16" x="478" flags="0000000a" y="569" h="8" pid="13" iid="2">

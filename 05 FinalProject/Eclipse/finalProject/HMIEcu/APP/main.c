@@ -46,7 +46,7 @@ int main() {
     }
 
     /* Create the Human Interface task */
-    if(pdPASS != xTaskCreate(HI_task, "HI", 900, NULL, 1, NULL)) {
+    if(pdPASS != xTaskCreate(HI_task, "HI", 950, NULL, 1, NULL)) {
         return 0; /* Failed to create the Human Interface task */
     }
 

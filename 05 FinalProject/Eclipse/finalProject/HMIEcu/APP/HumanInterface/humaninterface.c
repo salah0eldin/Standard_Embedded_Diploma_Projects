@@ -29,24 +29,40 @@
 const uint8 keypadKeys[] = { '7', '8', '9', 0, '4', '5', '6', 0, '1', '2', '3', '-', 0, '0',
 KEYPAD_ENTER_ASCII, '+' }; /* Keypad key mapping array */
 
-static uint8 g_sendValue = 0; /* Variable to hold the value to send  */
+static uint8 g_sendValue = 0; 	 /* Variable to hold the value to send  */
 static uint8 g_receiveValue = 0; /* Variable to hold the received value */
 
-uint8 timeToWait = 60; /* Time to wait during certain operations 	*/
-uint8 iterator = 0; /* Counter for iterating attempts or inputs */
-uint8 key; /* Variable for storing the pressed key		*/
+uint8 timeToWait = 60; 	/* Time to wait during certain operations 	*/
+uint8 iterator = 0; 	/* Counter for iterating attempts or inputs */
+uint8 key; 				/* Variable for storing the pressed key		*/
 
 /*******************************************************************************
  *                              Private Function Prototypes                    *
  *******************************************************************************/
+/* Handle timeout when pass input times out */
 static void HI_passTimesOut(void);
+
+/* Display control error message */
 static void HI_showControlError(void);
+
+/* Enter the password */
 static void HI_enterPassword(void);
+
+/* Retrieve and validate the entered password */
 static uint8 HI_getAndCheckPass(void);
+
+/* Update the stored password */
 static uint8 HI_updatePass(void);
+
+/* Initialize the task for the human interface */
 static void HI_taskInit(void);
+
+/* Check if a password exists and log in */
 static void HI_checkPassExistAndLogIn(void);
+
+/* Manage door control based on conditions */
 static void HI_handleDoor(void);
+
 
 /*******************************************************************************
  *                              Public Function Definitions                     *
