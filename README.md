@@ -45,12 +45,38 @@ Here you will find a collection of projects developed during the Standard Embedd
 ## High-Lights
 
 ### Final-Project
-!Final-Project
 
+This project is a FreeRTOS-based application developed for a human-machine interface (HMI) control system. It integrates various components such as a keypad, LCD, buzzer, DC motor, and PIR sensor to create an interactive and responsive control environment. The architecture follows a modular design, allowing for easy scalability and maintenance.
+
+#### HMIEcu
+- **APP**: Contains application-specific code for the human-machine interface.
+  - **ControlInterface**: Manages the interaction between the control system and the user.
+  - **HumanInterface**: Handles user interface operations and interactions.
+- **ECU**: Contains components for input and output.
+  - **Keypad**: Code for handling keypad input.
+  - **LCD**: Code for displaying information on an LCD.
+- **FreeRTOS**: Contains the FreeRTOS kernel files.
+- **LIB**: Utility files providing common macros and type definitions.
+- **MCAL**: Microcontroller Abstraction Layer containing hardware interaction code.
+
+#### controlEcu
+- **APP**: Application-specific code for the control ECU.
+  - **Door**: Controls the door mechanism.
+  - **HMIECUInterface**: Interface code between HMI and control ECU.
+- **ECU**: Contains components for other actuators and sensors.
+  - **Buzzer**: Code for buzzer operations.
+  - **DCMotor**: Code for controlling DC motors.
+  - **I2C_EEPROM**: Code for handling EEPROM through I2C communication.
+  - **PIR**: Code for handling passive infrared sensor input.
+- **FreeRTOS**: Contains the FreeRTOS kernel files.
+- **LIB**: Utility files for common macros and type definitions.
+- **MCAL**: Contains hardware interaction code.
+
+#### shared
+- **shared.h**: Common definitions shared between the ECUs.
 
 
 ### stdDrivers
-!stdDrivers
 
 The `stdDrivers` folder `PATH:interfacing2/Eclipse` contains standard drivers used across various projects. These drivers are essential for interfacing with different hardware components and ensuring smooth operation of the embedded systems. The drivers include:
 
