@@ -70,7 +70,7 @@ int main() {
     }
 
     /* Create the USART receiver task with a stack size of 800 and priority 3 */
-    if (pdPASS != xTaskCreate(HMI_usartReceiverTask, "HMR", 850, NULL, 3, NULL)) {
+    if (pdPASS != xTaskCreate(HMI_usartReceiverTask, "HMR", 800, NULL, 3, NULL)) {
         return 0; /* Return if task creation fails */
     }
 

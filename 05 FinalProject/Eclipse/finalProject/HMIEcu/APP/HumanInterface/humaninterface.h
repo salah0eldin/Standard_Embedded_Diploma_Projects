@@ -25,6 +25,7 @@
  *******************************************************************************/
 #define LOCK_DELAY_TIME  pdMS_TO_TICKS(100)  /**< Time to lock the interface */
 #define DELAY_TIME    	 pdMS_TO_TICKS(500)  /**< General delay time */
+#define PASS_TIME_TO_WAIT	60
 
 /*******************************************************************************
  *                              Function Prototypes                            *

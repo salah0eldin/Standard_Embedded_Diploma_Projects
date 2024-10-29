@@ -32,8 +32,6 @@ KEYPAD_ENTER_ASCII, '+' }; /* Keypad key mapping array */
 static uint8 g_sendValue = 0; 	 /* Variable to hold the value to send  */
 static uint8 g_receiveValue = 0; /* Variable to hold the received value */
 
-uint8 timeToWait = 60; 	/* Time to wait during certain operations 	*/
-uint8 iterator = 0; 	/* Counter for iterating attempts or inputs */
 uint8 key; 				/* Variable for storing the pressed key		*/
 
 /*******************************************************************************
@@ -112,7 +110,6 @@ void HI_task(void *pvParameters) {
 					if (HI_updatePass() == TRUE) {
 						/** Notify the user that the password has been successfully changed. */
 						LCD_displayString("Pass Changed");
-						LCD_displayStringRowColumn(1, 0, "Successfully!");
 						/** Delay to allow the user to read the message. */
 						vTaskDelay(DELAY_TIME);
 					}
@@ -145,6 +142,8 @@ static void HI_passTimesOut(void) {
 	LCD_displayString("System Locked");
 	LCD_displayStringRowColumn(1, 0, "Wait For");
 
+	uint8 timeToWait = PASS_TIME_TO_WAIT; 	/* Time to wait during certain operations 	*/
+
 	/** Countdown while timeToWait is not zero. */
 	while (timeToWait != 0) {
 		/** Display the remaining time on the LCD. */
@@ -175,8 +174,7 @@ static void HI_passTimesOut(void) {
  */
 static void HI_showControlError(void) {
 	/** Display a message indicating there was a control error. */
-	LCD_displayString("Control Error");
-	LCD_displayStringRowColumn(1, 0, "Try again!");
+	LCD_displayString("Control Error !");
 
 	/** Delay for a predefined period to allow the user to read the message. */
 	vTaskDelay(DELAY_TIME);
@@ -195,7 +193,7 @@ static void HI_enterPassword(void) {
 	LCD_moveCursor(1, 5);
 
 	/** Initialize the iterator to track the number of entered characters. */
-	iterator = 0;
+	uint8 iterator = 0;
 
 	/** Loop until the maximum password length is reached. */
 	while (iterator < SHARED_PASS_LENGTH) {
@@ -395,13 +393,6 @@ static void HI_checkPassExistAndLogIn(void) {
 		while (HI_getAndCheckPass() == FALSE)
 			; /** Keep trying until the password is correct. */
 
-		/** Clear the LCD screen and display the unlock message. */
-		LCD_clearScreen();
-		LCD_displayString("System Un-Locked");
-		LCD_displayStringRowColumn(1, 0, "Welcome!");
-
-		/** Delay to allow the user to see the unlock message. */
-		vTaskDelay(DELAY_TIME);
 	} else {
 		/** If the password does not exist, attempt to update the password. */
 		while (HI_updatePass() == FALSE)
@@ -416,8 +407,7 @@ static void HI_checkPassExistAndLogIn(void) {
  */
 static void HI_handleDoor(void) {
 	/** Display a message indicating the door is unlocking. */
-	LCD_displayString("Door Unlocking");
-	LCD_displayStringRowColumn(1, 0, "Please Wait...");
+	LCD_displayString("Door Unlocking..");
 
 	/** Initialize the receive value to indicate failure initially. */
 	g_receiveValue = SHARED_FAIL;

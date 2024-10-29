@@ -45,14 +45,14 @@ int main() {
         return 0; /* Failed to create the receive queue */
     }
 
-    /* Create the send queue with a maximum of 10 items of size uint8 */
-    g_xQueueSend = xQueueCreate(10, sizeof(uint8));
+    /* Create the send queue with a maximum of 5 items of size uint8 */
+    g_xQueueSend = xQueueCreate(5, sizeof(uint8));
     if (g_xQueueSend == NULL) {
         return 0; /* Failed to create the send queue */
     }
 
     /* Create the Human Interface task */
-    if(pdPASS != xTaskCreate(HI_task, "HI", 950, NULL, 1, NULL)) {
+    if(pdPASS != xTaskCreate(HI_task, "HI", 1000, NULL, 1, NULL)) {
         return 0; /* Failed to create the Human Interface task */
     }
 
